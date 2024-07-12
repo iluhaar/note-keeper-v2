@@ -1,0 +1,88 @@
+#root {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  max-width: 1280px;
+  padding: 0 2rem 2rem 2rem;
+  text-align: center;
+  max-height: 100vh;
+  width: 1280px;
+}
+
+.wrapper {
+  height: 45vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 5px dashed red;
+}
+
+.layout--wrapper {
+  display: flex;
+  min-height: 95vh; /* Set minimum height for full viewport */
+}
+
+.sidebar {
+  background-color: #f0f0f0; /* Adjust sidebar background color */
+  width: 200px; /* Set sidebar width */
+  padding: 1rem;
+  color: #000;
+  text-align: left;
+}
+
+.sidebar a {
+  text-decoration: underline;
+}
+.content-wrapper {
+  flex: 1; /* Allow main content to fill remaining space */
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.header {
+  background-color: #e0e0e0; /* Adjust header background color */
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.main-content {
+  padding: 1rem;
+  flex: 1; /* Allow main content to expand */
+  min-width: 25vw;
+}
+
+.w-md-editor-toolbar ul li button svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.control__buttons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.notes-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.note {
+  flex: 1;
+  text-align: left;
+  padding: 1rem;
+}
+
+.account {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+}
