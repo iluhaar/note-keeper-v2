@@ -86,3 +86,30 @@
   justify-content: flex-start;
   text-align: left;
 }
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  #root {
+    padding: 0;
+  }
+  .layout--wrapper {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .sidebar {
+    width: 100svw;
+  }
+
+  .content-wrapper {
+    padding: 1rem;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+}

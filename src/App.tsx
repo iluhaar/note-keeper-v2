@@ -12,7 +12,7 @@ function App() {
     if (isLoggedIn) {
       navigate("/editor");
     }
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <>

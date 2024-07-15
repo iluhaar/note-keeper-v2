@@ -1,5 +1,5 @@
 interface UserNotes {
-  id: number;
+  id: number | string;
   note: string;
 }
 
@@ -16,4 +16,6 @@ interface Context {
   logIn: (email: string, password: string, name: string) => void;
   logOut: () => void;
   userData: UserData | undefined;
+  searchInNotes: (input: string) => UserNotes[];
+  deleteNote: (id: number) => void;
 }

@@ -6,6 +6,8 @@ import {
   useState,
 } from "react";
 
+import { v4 as uuid } from "uuid";
+
 export const NotesContext = createContext<Context | null>(null);
 
 export const useNotesContext = () => useContext(NotesContext);
@@ -15,24 +17,20 @@ export const NotesProvider = ({ children }: Props) => {
   const [userData, setUserData] = useState<UserData | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const addNote = (note: string) => {
-    setUserNotes([...userNotes, { note, id: userNotes.length + 1 }]);
-
-    localStorage.setItem(
-      "userNotes",
-      JSON.stringify([...userNotes, { note, id: userNotes.length + 1 }])
-    );
-  };
-
   useEffect(() => {
     const userNotes = localStorage.getItem("userNotes");
     if (userNotes) {
       setUserNotes(JSON.parse(userNotes));
     }
+  }, []);
+
+  useEffect(() => {
     const user = localStorage.getItem("user");
+    const parsedUser = user ? JSON.parse(user) : undefined;
     if (user) {
       setIsLoggedIn(true);
-      setUserData(JSON.parse(user));
+      setUserData(parsedUser);
+      document.title = `${parsedUser.name} ${document.title}`;
     }
   }, []);
 
@@ -46,9 +44,42 @@ export const NotesProvider = ({ children }: Props) => {
     localStorage.setItem("user", JSON.stringify({ email, password, name }));
   };
 
+  const addNote = (note: string) => {
+    const title = note.split("\n")[0].replace("#", "").trim().split(" ")[0];
+
+    const id = `${title}-${uuid()}`;
+    setUserNotes([...userNotes, { note, id: id }]);
+
+    localStorage.setItem(
+      "userNotes",
+      JSON.stringify([...userNotes, { note, id: id }])
+    );
+  };
+
+  const deleteNote = (id: number) => {
+    const updatedNotes = userNotes.filter((note: UserNotes) => note.id !== id);
+
+    setUserNotes(updatedNotes);
+
+    localStorage.setItem("userNotes", JSON.stringify(updatedNotes));
+  };
+
+  const searchInNotes = (input: string) => {
+    return userNotes.filter((note: UserNotes) => note.note.includes(input));
+  };
+
   return (
     <NotesContext.Provider
-      value={{ userNotes, addNote, isLoggedIn, logIn, logOut, userData }}
+      value={{
+        userNotes,
+        addNote,
+        isLoggedIn,
+        logIn,
+        logOut,
+        userData,
+        searchInNotes,
+        deleteNote,
+      }}
     >
       {children}
     </NotesContext.Provider>

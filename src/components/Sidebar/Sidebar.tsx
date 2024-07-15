@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useNotesContext } from "../../Context/NotesContext";
 
 import { APP_NAME } from "../../contants";
+import SearchBar from "../SearchBar/SearchBar";
 
 const Sidebar = () => {
   const { userNotes, isLoggedIn, logOut } = useNotesContext();
@@ -15,25 +16,24 @@ const Sidebar = () => {
   let content;
   if (userNotes?.length) {
     content = (
-      <ul>
+      <ol>
         {userNotes?.map(({ note, id }: UserNotes) => {
           const noteTitle = note.split("\n")[0].replace("#", "");
 
           return (
             <li key={id}>
-              <Link to={`/editor/${id}`}>
-                {id}. {noteTitle}
-              </Link>
+              <Link to={`/editor/${id}`}>{noteTitle}</Link>
             </li>
           );
         })}
-      </ul>
+      </ol>
     );
   }
 
   return (
     <nav className="sidebar">
       <h3>{APP_NAME}</h3>
+      <SearchBar />
       <ul>
         <li>
           <Link to={"/account"}>Account</Link>

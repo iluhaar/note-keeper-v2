@@ -1,19 +1,35 @@
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useNotesContext } from "../../Context/NotesContext";
 import MDEditor from "@uiw/react-md-editor";
 
 const NotePreview = () => {
   const { id } = useParams();
 
-  const { userNotes } = useNotesContext() as Context;
+  const { userNotes, deleteNote } = useNotesContext() as Context;
 
-  const note = userNotes.find(
-    (note: UserNotes) => note.id === Number(id)
-  )?.note;
+  const navigate = useNavigate();
+
+  const note = userNotes.find((note: UserNotes) => note.id === id)?.note ?? "";
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(note);
+  };
+
+  const handleDelete = () => {
+    deleteNote(Number(id));
+    navigate("/notes");
+  };
 
   return (
     <>
       <MDEditor.Markdown source={note} style={{ whiteSpace: "pre-wrap" }} />
+      <div>
+        <Link to={`/editor/${id}`}>
+          <button>Edit</button>
+        </Link>
+        <button onClick={handleCopyToClipboard}>Copy to clipboard</button>
+        <button onClick={handleDelete}>Delete</button>
+      </div>
     </>
   );
 };

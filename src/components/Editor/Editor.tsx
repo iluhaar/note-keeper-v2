@@ -18,9 +18,7 @@ const Editor = ({ place }: Props) => {
 
   useEffect(() => {
     if (id !== undefined) {
-      setValue(
-        userNotes.find((note: UserNotes) => note.id === Number(id))?.note
-      );
+      setValue(userNotes.find((note: UserNotes) => note.id === id)?.note);
     }
   }, [id]);
 

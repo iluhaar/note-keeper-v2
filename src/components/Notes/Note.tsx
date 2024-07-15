@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Note = ({ note, id }: UserNotes) => {
   const title = note.split("\n")[0].replace("#", "");
-  const content = note.split("\n").slice(1).join("\n");
+  const content = note.split("\n").slice(1).join("\n").replaceAll("#", "");
 
   return (
     <div style={{ border: "1px solid black" }} className="note">

@@ -15,8 +15,6 @@ const Login = () => {
     await logIn(form.email.value, form.password.value, form.name.value);
 
     await navigate("/editor");
-
-    document.title = `${form.name.value} ${document.title}`;
   };
 
   return (
