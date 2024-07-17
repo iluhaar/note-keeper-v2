@@ -92,13 +92,14 @@
   #root {
     padding: 0;
   }
-  .layout--wrapper {
+  /* .layout--wrapper {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
+  } */
   .sidebar {
-    width: 100svw;
+    width: 10svw;
+    /* display: flex; */
   }
 
   .content-wrapper {

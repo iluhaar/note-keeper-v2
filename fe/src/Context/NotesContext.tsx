@@ -12,16 +12,30 @@ export const NotesContext = createContext<Context | null>(null);
 
 export const useNotesContext = () => useContext(NotesContext);
 
+const getNotes = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/notes");
+    const data = await response.json();
+    return data.notes;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const NotesProvider = ({ children }: Props) => {
   const [userNotes, setUserNotes] = useState<UserNotes[]>([]);
   const [userData, setUserData] = useState<UserData | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const userNotes = localStorage.getItem("userNotes");
-    if (userNotes) {
-      setUserNotes(JSON.parse(userNotes));
-    }
+    // const userNotes = localStorage.getItem("userNotes");
+    // if (userNotes) {
+    //   setUserNotes(JSON.parse(userNotes));
+    // }
+
+    getNotes().then((notes) => {
+      setUserNotes(notes);
+    });
   }, []);
 
   useEffect(() => {
