@@ -8,6 +8,10 @@ import Notes from "./components/Notes/Notes";
 import NotePreview from "./components/Notes/NotePreview";
 import Account from "./components/Account/Account";
 
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -54,9 +58,11 @@ const router = createBrowserRouter([
 
 const AppWrapper = () => {
   return (
-    <NotesProvider notes={[]}>
-      <RouterProvider router={router} />
-    </NotesProvider>
+    <QueryClientProvider client={queryClient}>
+      <NotesProvider>
+        <RouterProvider router={router} />
+      </NotesProvider>
+    </QueryClientProvider>
   );
 };
 

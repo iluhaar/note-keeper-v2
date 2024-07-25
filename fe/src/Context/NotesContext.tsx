@@ -6,37 +6,26 @@ import {
   useState,
 } from "react";
 
+import { useQuery } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
+
+import { updateNotes, getNotes } from "../helpers/notes";
 
 export const NotesContext = createContext<Context | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useNotesContext = () => useContext(NotesContext);
-
-const getNotes = async () => {
-  try {
-    const response = await fetch("http://localhost:3000/notes");
-    const data = await response.json();
-    return data.notes;
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 export const NotesProvider = ({ children }: Props) => {
   const [userNotes, setUserNotes] = useState<UserNotes[]>([]);
   const [userData, setUserData] = useState<UserData | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    // const userNotes = localStorage.getItem("userNotes");
-    // if (userNotes) {
-    //   setUserNotes(JSON.parse(userNotes));
-    // }
-
-    getNotes().then((notes) => {
-      setUserNotes(notes);
-    });
-  }, []);
+  //TODO try to fix the ts error
+  const { data }: { data: UserNotes[] | [] } = useQuery({
+    queryKey: ["notes"],
+    queryFn: getNotes,
+  });
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -58,24 +47,31 @@ export const NotesProvider = ({ children }: Props) => {
     localStorage.setItem("user", JSON.stringify({ email, password, name }));
   };
 
-  const addNote = (note: string) => {
+  const addNote = async (note: string) => {
     const title = note.split("\n")[0].replace("#", "").trim().split(" ")[0];
 
     const id = `${title}-${uuid()}`;
-    setUserNotes([...userNotes, { note, id: id }]);
+    const updatedNotes = [...userNotes, { id: id, note }];
 
-    localStorage.setItem(
-      "userNotes",
-      JSON.stringify([...userNotes, { note, id: id }])
-    );
+    setUserNotes(updatedNotes);
+
+    updateNotes(updatedNotes)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserNotes(data.notes);
+      });
   };
 
-  const deleteNote = (id: number) => {
+  const deleteNote = (id: string) => {
     const updatedNotes = userNotes.filter((note: UserNotes) => note.id !== id);
 
     setUserNotes(updatedNotes);
 
-    localStorage.setItem("userNotes", JSON.stringify(updatedNotes));
+    updateNotes(updatedNotes)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserNotes(data.notes);
+      });
   };
 
   const searchInNotes = (input: string) => {
@@ -85,7 +81,7 @@ export const NotesProvider = ({ children }: Props) => {
   return (
     <NotesContext.Provider
       value={{
-        userNotes,
+        userNotes: data,
         addNote,
         isLoggedIn,
         logIn,

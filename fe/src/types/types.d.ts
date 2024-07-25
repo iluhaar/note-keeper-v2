@@ -17,5 +17,5 @@ interface Context {
   logOut: () => void;
   userData: UserData | undefined;
   searchInNotes: (input: string) => UserNotes[];
-  deleteNote: (id: number) => void;
+  deleteNote: (id: string) => void;
 }

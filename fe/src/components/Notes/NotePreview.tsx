@@ -16,7 +16,8 @@ const NotePreview = () => {
   };
 
   const handleDelete = () => {
-    deleteNote(Number(id));
+    if (id === undefined) return;
+    deleteNote(id);
     navigate("/notes");
   };
 
