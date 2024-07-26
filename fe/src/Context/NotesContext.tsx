@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
 
 import { updateNotes, getNotes } from "../helpers/notes";
@@ -21,6 +21,7 @@ export const NotesProvider = ({ children }: Props) => {
   const [userData, setUserData] = useState<UserData | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const queryClient = useQueryClient();
   //TODO try to fix the ts error
   const { data }: { data: UserNotes[] | [] } = useQuery({
     queryKey: ["notes"],
@@ -28,12 +29,18 @@ export const NotesProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
+    setUserNotes(data);
+  }, [data]);
+
+  useEffect(() => {
     const user = localStorage.getItem("user");
     const parsedUser = user ? JSON.parse(user) : undefined;
     if (user) {
       setIsLoggedIn(true);
       setUserData(parsedUser);
-      document.title = `${parsedUser.name} ${document.title}`;
+      if (!document.title.includes(parsedUser.name)) {
+        document.title = `${parsedUser.name} ${document.title}`;
+      }
     }
   }, []);
 
@@ -51,27 +58,25 @@ export const NotesProvider = ({ children }: Props) => {
     const title = note.split("\n")[0].replace("#", "").trim().split(" ")[0];
 
     const id = `${title}-${uuid()}`;
-    const updatedNotes = [...userNotes, { id: id, note }];
-
-    setUserNotes(updatedNotes);
+    const updatedNotes = [...data, { id: id, note }];
 
     updateNotes(updatedNotes)
       .then((res) => res.json())
-      .then((data) => {
-        setUserNotes(data.notes);
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ["notes"] });
+
+        setUserNotes(updatedNotes);
       });
   };
 
   const deleteNote = (id: string) => {
     const updatedNotes = userNotes.filter((note: UserNotes) => note.id !== id);
 
-    setUserNotes(updatedNotes);
+    // setUserNotes(updatedNotes);
 
-    updateNotes(updatedNotes)
-      .then((res) => res.json())
-      .then((data) => {
-        setUserNotes(data.notes);
-      });
+    updateNotes(updatedNotes).then(() =>
+      queryClient.invalidateQueries({ queryKey: ["notes"] })
+    );
   };
 
   const searchInNotes = (input: string) => {
@@ -81,7 +86,7 @@ export const NotesProvider = ({ children }: Props) => {
   return (
     <NotesContext.Provider
       value={{
-        userNotes: data,
+        userNotes,
         addNote,
         isLoggedIn,
         logIn,

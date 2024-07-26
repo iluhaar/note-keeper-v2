@@ -9,6 +9,7 @@ import NotePreview from "./components/Notes/NotePreview";
 import Account from "./components/Account/Account";
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { mainRoute } from "./helpers/loaders";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    loader: () => mainRoute(),
   },
   {
     path: "/account",

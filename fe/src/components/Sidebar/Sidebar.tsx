@@ -5,11 +5,11 @@ import { APP_NAME } from "../../contants";
 import SearchBar from "../SearchBar/SearchBar";
 
 const Sidebar = () => {
-  const { userNotes, isLoggedIn, logOut } = useNotesContext();
+  const { userNotes, isLoggedIn, logOut } = useNotesContext() as Context;
 
   const navigate = useNavigate();
-  const handleLogout = async () => {
-    await logOut();
+  const handleLogout = () => {
+    logOut();
     return navigate("/");
   };
 
@@ -18,7 +18,10 @@ const Sidebar = () => {
     content = (
       <ol>
         {userNotes?.map(({ note, id }: UserNotes) => {
-          const noteTitle = note.split("\n")[0].replace("#", "");
+          const noteTitle = note
+            .split("\n")[0]
+            .replaceAll("#", "")
+            .replaceAll("*", "");
 
           return (
             <li key={id}>

@@ -1,18 +1,18 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import "./App.css";
 import Editor from "./components/Editor/Editor";
 import { useEffect } from "react";
-import { useNotesContext } from "./Context/NotesContext";
 
 function App() {
   const navigate = useNavigate();
-  const { isLoggedIn } = useNotesContext() as Context;
+
+  const log = useLoaderData();
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (log) {
       navigate("/editor");
     }
-  }, [isLoggedIn]);
+  }, [log]);
 
   return (
     <>
