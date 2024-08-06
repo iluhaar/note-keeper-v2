@@ -33,16 +33,13 @@ const Editor = ({ place }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const height = place === "home" ? "50vh" : "90vh";
-
   return (
     <div className="flex flex-col items-center justify-center sm:w-full h-full pt-4 sm:max-w-50 sm:pt-0 sm:items-start sm:justify-start">
       <MDEditor
         data-color-mode={theme ? "dark" : "light"}
         value={value}
+        className="w-[90%] sm:w-full !h-[75vh] sm:!h-[90vh]"
         onChange={(e) => setValue(e)}
-        className={`!h-[38rem] w-[90%] sm:w-full sm:!h-[${height}]`}
-        preview={place === "home" ? "edit" : "live"}
         visibleDragbar={false}
       />
 
