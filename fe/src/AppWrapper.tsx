@@ -5,7 +5,6 @@ import Editor from "./components/Editor/Editor";
 import { NotesProvider } from "./Context/NotesContext";
 import Notes from "./components/Notes/Notes";
 import NotePreview from "./components/Notes/NotePreview";
-import Account from "./components/Account/Account";
 
 // import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { mainRoute } from "./helpers/loaders";
@@ -17,11 +16,6 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     loader: () => mainRoute(),
-  },
-  {
-    path: "/account",
-    element: <Layout />,
-    children: [{ path: "", element: <Account /> }],
   },
   {
     path: "/editor",
