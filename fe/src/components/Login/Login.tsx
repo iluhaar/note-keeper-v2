@@ -1,37 +1,76 @@
-import { FormEvent } from "react";
-import "./login.css";
-import { useNavigate } from "react-router-dom";
-import { useNotesContext } from "../../Context/NotesContext";
+import { FormEvent, useState } from "react";
 
-const Login = () => {
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Progress } from "../ui/progress";
+import { useNavigate } from "react-router-dom";
+import { useNotesContext } from "@/Context/NotesContext";
+
+export function Login() {
+  const [progress, setProgress] = useState(0);
+
   const { logIn } = useNotesContext() as Context;
 
   const navigate = useNavigate();
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
 
-    await logIn(form.email.value, form.password.value, form.name.value);
+    logIn(form.email.value, form.password.value, form.user_name.value);
 
-    await navigate("/editor");
+    setTimeout(() => setProgress(66), 500);
+    setTimeout(() => {
+      setProgress(100);
+      navigate("/editor");
+    }, 700);
   };
 
   return (
-    <>
-      <form className="login-wrapper" onSubmit={(e) => handleSubmit(e)}>
-        <>
-          <label htmlFor="name"> Name:</label>
-          <input name="name" type="text" required autoFocus />
-          <label htmlFor="email">Email:</label>
-          <input name="email" type="email" required />
-          <label htmlFor="password">Password:</label>
-          <input name="password" type="password" required />
-        </>
-        <button type="submit">Login</button>
-      </form>
-    </>
+    <Dialog>
+      <DialogTrigger asChild>
+        <span className="cursor-pointer underline px-2">Login</span>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Login</DialogTitle>
+          <DialogDescription>
+            Fill the form and click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="h-full w-full flex flex-col items-center justify-center">
+          <form
+            className="flex flex-col text-left gap-2"
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <>
+              <Label htmlFor="name"> Name:</Label>
+              <Input name="user_name" type="text" required autoFocus />
+              <Label htmlFor="email">Email:</Label>
+              <Input name="email" type="email" required />
+              <Label htmlFor="password">Password:</Label>
+              <Input name="password" type="password" required />
+            </>
+            <DialogFooter>
+              {progress > 0 ? (
+                <Progress value={progress} className="w-[60%]" />
+              ) : (
+                <Button type="submit">Login</Button>
+              )}
+            </DialogFooter>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
-};
-
-export default Login;
+}

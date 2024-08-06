@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNotes = getNotes;
 exports.updateNotes = updateNotes;
+exports.deleteNote = deleteNote;
 exports.handleLogin = handleLogin;
 var firebase_1 = require("./helpers/firebase");
 var mockedNotes = [
@@ -103,6 +104,39 @@ function updateNotes(fastify, options) {
                         case 3:
                             error_1 = _a.sent();
                             console.log("🚀 ~ fastify.post ~ error:", error_1);
+                            return [3 /*break*/, 4];
+                        case 4: return [2 /*return*/];
+                    }
+                });
+            }); });
+            return [2 /*return*/];
+        });
+    });
+}
+function deleteNote(fastify, options) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _this = this;
+        return __generator(this, function (_a) {
+            fastify.delete("/delete-note", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+                var error_2;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            reply.headers({
+                                "Access-Control-Allow-Origin": "http://localhost:5173",
+                                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                                "Access-Control-Allow-Methods": "POST",
+                            });
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            return [4 /*yield*/, (0, firebase_1.deleteData)(request.body)];
+                        case 2:
+                            _a.sent();
+                            return [2 /*return*/, { notes: request.body }];
+                        case 3:
+                            error_2 = _a.sent();
+                            console.log("🚀 ~ fastify.post ~ error:", error_2);
                             return [3 /*break*/, 4];
                         case 4: return [2 /*return*/];
                     }

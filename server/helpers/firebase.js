@@ -47,7 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateData = exports.getData = void 0;
+exports.deleteData = exports.updateData = exports.getData = void 0;
 var app_1 = require("firebase/app");
 var database_1 = require("firebase/database");
 var constants_1 = require("../constants");
@@ -74,3 +74,13 @@ var updateData = function (data) { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 exports.updateData = updateData;
+var deleteData = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var databaseRef;
+    return __generator(this, function (_a) {
+        databaseRef = (0, database_1.ref)(database, "/notes/".concat(id));
+        return [2 /*return*/, (0, database_1.remove)(databaseRef).then(function (d) {
+                console.log(d);
+            })];
+    });
+}); };
+exports.deleteData = deleteData;

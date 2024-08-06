@@ -15,6 +15,7 @@ fastify.register(cors_1.default, {
 });
 fastify.register(routes_js_1.getNotes);
 fastify.register(routes_js_1.updateNotes);
+fastify.register(routes_js_1.deleteNote);
 fastify.listen({ port: 3000 }, function (err, address) {
     if (err) {
         fastify.log.error(err);

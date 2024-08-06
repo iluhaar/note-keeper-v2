@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
 
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+
 const Note = ({ note, id }: UserNotes) => {
-  const title = note.split("\n")[0].replace("#", "");
+  const title = note.split("\n")[0].replaceAll("#", "");
   const content = note.split("\n").slice(1).join("\n").replaceAll("#", "");
 
   return (
-    <div style={{ border: "1px solid black" }} className="note">
-      <h2>
+    <Card className="flex-1 text-left p-5 dark:bg-slate-800 shadow-sm h-80 max-w-[174px] min-w-[174px]">
+      <CardTitle>
         <Link to={`${id}`}>{title}</Link>
-      </h2>
-      <span>{content}</span>
-    </div>
+      </CardTitle>
+      <CardContent>{content}</CardContent>
+    </Card>
   );
 };
 

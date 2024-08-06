@@ -10,12 +10,15 @@ interface UserData {
 }
 
 interface Context {
-  userNotes: UserNotes[];
+  userNotes: UserNotes[] | [];
   addNote: (note: string) => void;
   isLoggedIn: boolean;
   logIn: (email: string, password: string, name: string) => void;
   logOut: () => void;
   userData: UserData | undefined;
   searchInNotes: (input: string) => UserNotes[];
-  deleteNote: (id: string) => void;
+  deleteNote: (id: string) => Promise;
+  editNote: (id: string, value: string) => void;
+  theme: boolean;
+  toggleTheme: (arg: boolean) => void;
 }

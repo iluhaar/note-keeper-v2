@@ -2,15 +2,25 @@ import MDEditor from "@uiw/react-md-editor";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNotesContext } from "../../Context/NotesContext";
+import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 const Editor = ({ place }: Props) => {
   const { id } = useParams();
 
-  const { addNote, userNotes } = useNotesContext() as Context;
+  const { addNote, userNotes, editNote, theme } = useNotesContext() as Context;
 
   const [value, setValue] = useState<string | undefined>("");
 
-  const editorHeight = place === "home" ? "35vh" : "80vh";
+  const handleSave = (value: string) => {
+    if (id) {
+      editNote(id, value);
+      return toast("Note has been edited");
+    }
+
+    addNote(value);
+    return toast("Note has been saved");
+  };
 
   const handleClear = () => {
     setValue("");
@@ -20,28 +30,34 @@ const Editor = ({ place }: Props) => {
     if (id !== undefined) {
       setValue(userNotes.find((note: UserNotes) => note.id === id)?.note);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
-    <div className="main-content">
+    <div className="flex flex-col items-center justify-center sm:w-full h-full pt-4 sm:max-w-50 sm:pt-0 sm:items-start">
       <MDEditor
+        data-color-mode={theme ? "dark" : "light"}
         value={value}
         onChange={(e) => setValue(e)}
-        height={editorHeight}
+        className={`!h-[38rem] w-[90%] sm:w-full sm:!h-[${
+          place === "home" ? "50vh" : "90vh"
+        }]`}
+        preview={place === "home" ? "edit" : "live"}
+        visibleDragbar={false}
       />
 
       {place !== "home" && (
-        <div className="control__buttons">
-          <button
+        <div className="flex flex-row py-3 gap-2">
+          <Button
             disabled={value === "" || value === undefined}
             onClick={() => {
               if (value === undefined) return;
-              addNote(value);
+              handleSave(value);
             }}
           >
-            Save
-          </button>
-          <button onClick={handleClear}>Clear</button>
+            {id ? "Edit" : "Save"}
+          </Button>
+          <Button onClick={handleClear}>Clear</Button>
         </div>
       )}
     </div>

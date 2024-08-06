@@ -1,6 +1,6 @@
 // ESM
 import Fastify from "fastify";
-import { getNotes, updateNotes } from "./routes.js";
+import { deleteNote, getNotes, updateNotes } from "./routes.js";
 import cors from "@fastify/cors";
 /**
  * @type {import('fastify').FastifyInstance} Instance of Fastify
@@ -14,6 +14,7 @@ fastify.register(cors, {
 });
 fastify.register(getNotes);
 fastify.register(updateNotes);
+fastify.register(deleteNote);
 
 fastify.listen({ port: 3000 }, function (err, address) {
   if (err) {

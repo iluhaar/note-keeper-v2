@@ -21,4 +21,22 @@ const getNotes = async (): Promise<UserNotes[]> => {
   }
 };
 
-export { getNotes, updateNotes };
+const removeNote = async (id: string): Promise<void> => {
+  try {
+    const response = await fetch("http://localhost:3000/delete-note", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getNotes, updateNotes, removeNote };

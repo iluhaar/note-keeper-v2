@@ -1,11 +1,12 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useNotesContext } from "../../Context/NotesContext";
 import MDEditor from "@uiw/react-md-editor";
+import { Button } from "../ui/button";
 
 const NotePreview = () => {
   const { id } = useParams();
 
-  const { userNotes, deleteNote } = useNotesContext() as Context;
+  const { userNotes, deleteNote, theme } = useNotesContext() as Context;
 
   const navigate = useNavigate();
 
@@ -17,21 +18,25 @@ const NotePreview = () => {
 
   const handleDelete = () => {
     if (id === undefined) return;
-    deleteNote(id);
-    navigate("/notes");
+    deleteNote(id).then(() => navigate("/notes"));
   };
 
   return (
-    <>
-      <MDEditor.Markdown source={note} style={{ whiteSpace: "pre-wrap" }} />
-      <div>
+    <div className="gap-2 flex flex-col h-full">
+      <MDEditor.Markdown
+        data-color-mode={theme ? "dark" : "light"}
+        source={note}
+        style={{ whiteSpace: "pre-wrap" }}
+        className="h-full p-5"
+      />
+      <div className="flex flex-row gap-2 flex-start">
         <Link to={`/editor/${id}`}>
-          <button>Edit</button>
+          <Button>Edit</Button>
         </Link>
-        <button onClick={handleCopyToClipboard}>Copy to clipboard</button>
-        <button onClick={handleDelete}>Delete</button>
+        <Button onClick={handleCopyToClipboard}>Copy to clipboard</Button>
+        <Button onClick={handleDelete}>Delete</Button>
       </div>
-    </>
+    </div>
   );
 };
 

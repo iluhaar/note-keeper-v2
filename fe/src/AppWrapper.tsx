@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
-import Login from "./components/Login/Login";
 import Layout from "./Layout";
 import Editor from "./components/Editor/Editor";
 import { NotesProvider } from "./Context/NotesContext";
@@ -23,10 +22,6 @@ const router = createBrowserRouter([
     path: "/account",
     element: <Layout />,
     children: [{ path: "", element: <Account /> }],
-  },
-  {
-    path: "/login",
-    element: <Login />,
   },
   {
     path: "/editor",

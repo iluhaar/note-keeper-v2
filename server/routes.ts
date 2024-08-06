@@ -1,5 +1,5 @@
 import { update } from "firebase/database";
-import { getData, updateData } from "./helpers/firebase";
+import { deleteData, getData, updateData } from "./helpers/firebase";
 import { request } from "http";
 
 const mockedNotes = [
@@ -43,6 +43,25 @@ export async function updateNotes(fastify, options) {
 
     try {
       await updateData(request.body);
+
+      return { notes: request.body };
+    } catch (error) {
+      console.log("🚀 ~ fastify.post ~ error:", error);
+    }
+  });
+}
+
+export async function deleteNote(fastify, options) {
+  fastify.delete("/delete-note", async (request, reply) => {
+    reply.headers({
+      "Access-Control-Allow-Origin": "http://localhost:5173",
+      "Access-Control-Allow-Headers":
+        "Origin, X-Requested-With, Content-Type, Accept",
+      "Access-Control-Allow-Methods": "POST",
+    });
+
+    try {
+      await deleteData(request.body);
 
       return { notes: request.body };
     } catch (error) {
