@@ -7,12 +7,15 @@ import Account from "../Account/Account";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { CommandMenu } from "../SearchBar/CommandSearch";
 
 const NavBar = () => {
   const { userNotes, isLoggedIn, logOut, userData } =
     useNotesContext() as Context;
+
+  const navigate = useNavigate();
 
   let appTitle = "";
 
@@ -22,10 +25,9 @@ const NavBar = () => {
     appTitle = `${APP_NAME}`;
   }
 
-  const navigate = useNavigate();
   const handleLogout = () => {
     logOut();
-    return navigate("/");
+    navigate("/");
   };
 
   let content;
@@ -93,11 +95,12 @@ const NavBar = () => {
             )}
           </ul>
         </div>
-        <div className="sm:pt-2 hover:font-bold pr-3">
-          <NavLink to={""} onClick={handleLogout} className="cursor-pointer">
-            {" "}
-            Logout
-          </NavLink>
+        <div
+          role="button"
+          className="sm:pt-2 hover:font-bold pr-3"
+          onClick={handleLogout}
+        >
+          Logout
         </div>
       </CardContent>
     </Card>

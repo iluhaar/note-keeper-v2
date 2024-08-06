@@ -55,7 +55,9 @@ export const NotesProvider = ({ children }: Props) => {
 
   const logIn = (email: string, password: string, name: string) => {
     setIsLoggedIn(true);
-    localStorage.setItem("user", JSON.stringify({ email, password, name }));
+    const userInfo = { email, password, name };
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    setUserData(userInfo);
   };
 
   const addNote = async (note: string) => {
