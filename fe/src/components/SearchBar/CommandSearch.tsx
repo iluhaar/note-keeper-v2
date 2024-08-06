@@ -55,12 +55,13 @@ export function CommandMenu() {
         </div>
       </div>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput
-          placeholder="Type a command or search..."
-          //   onChange={(e: React.FormEvent<HTMLInputElement>) => handleSearch(e)}
-        />
-        <CommandList>
+      <CommandDialog
+        open={open}
+        onOpenChange={setOpen}
+        className="w-[400px] sm:w-[1200px] sm:max-w-[1200px] sm:h-[540px]"
+      >
+        <CommandInput placeholder="Type a command or search..." />
+        <CommandList className="sm:h-[540px] sm:max-h-[540px]">
           <CommandEmpty>No results found.</CommandEmpty>
 
           {userNotes && userNotes.length > 0 && (
