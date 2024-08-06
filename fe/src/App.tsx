@@ -33,7 +33,7 @@ function App() {
         <div className="w-80 px-5 py-2 rounded-sm shadow-sm bg-slate-400 my-2">
           <p className="text-left">
             To take more notes and sync them at your others devices{" "}
-            <span className=" text-slate-50">
+            <span className=" text-slate-50" role="button">
               <Login />
             </span>
           </p>
