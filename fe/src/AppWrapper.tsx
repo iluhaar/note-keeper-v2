@@ -7,10 +7,10 @@ import Notes from "./components/Notes/Notes";
 import NotePreview from "./components/Notes/NotePreview";
 import Account from "./components/Account/Account";
 
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+// import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { mainRoute } from "./helpers/loaders";
 
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -55,11 +55,11 @@ const router = createBrowserRouter([
 
 const AppWrapper = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <NotesProvider>
-        <RouterProvider router={router} />
-      </NotesProvider>
-    </QueryClientProvider>
+    // <QueryClientProvider client={queryClient}>
+    <NotesProvider>
+      <RouterProvider router={router} />
+    </NotesProvider>
+    // </QueryClientProvider>
   );
 };
 
