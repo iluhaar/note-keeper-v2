@@ -41,10 +41,10 @@ export function Login() {
       <DialogTrigger asChild>
         <span className="cursor-pointer underline px-2">Login</span>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-[400px] sm:max-w-[425px] text-left">
         <DialogHeader>
-          <DialogTitle>Login</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-left">Login</DialogTitle>
+          <DialogDescription className="text-left">
             Fill the form and click save when you're done.
           </DialogDescription>
         </DialogHeader>
@@ -61,7 +61,7 @@ export function Login() {
               <Label htmlFor="password">Password:</Label>
               <Input name="password" type="password" required />
             </>
-            <DialogFooter>
+            <DialogFooter className="pt-3">
               {progress > 0 ? (
                 <Progress value={progress} className="w-[60%]" />
               ) : (
