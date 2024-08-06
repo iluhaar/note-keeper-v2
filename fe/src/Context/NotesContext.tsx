@@ -158,31 +158,35 @@ interface Props {
 
 export const mockedNotes = [
   {
-    note: "# Summary \n## Functions: \n- add \n- edit\n- preview without editing\n- list node",
-    id: " Summary -641784f3-dc9b-4797-8a2f-b0922a225a75",
+    note: "# Shopping List\n## Items:\n- Milk\n- Bread\n- Eggs\n- Cheese",
+    id: "Shopping List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
   },
   {
-    note: "# Feature dev\n\n1. Connect to DB\n2. update UI (needed as hell) \n3. to work on UX\n\n\n",
-    id: "Feature dev-8fafab17-468d-46e5-afef-b981f6d54ee3",
+    note: "# Meeting Notes\n## Topics:\n- Project Update\n- Task Assignments\n- Next Steps",
+    id: "Meeting Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
   },
   {
-    note: "# Hesitate\nskdjhaskdh ",
-    id: "Hesitate-d535150a-9577-4246-94f1-96d2e994dbc1",
+    note: "# Recipe\n## Ingredients:\n- Flour\n- Sugar\n- Butter\n## Instructions:\n1. Preheat oven\n2. Mix ingredients",
+    id: "Recipe-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
   },
   {
-    note: "# Feature dev\n\n1. Connect to DB\n2. update UI (needed as hell) \n3. to work on UX\n\n\n",
-    id: "Feature dev-18fafab17-468d-46e5-afef-b981f6d54ee3",
+    note: "# Travel Itinerary\n## Days:\n- Day 1: Arrival\n- Day 2: Sightseeing\n- Day 3: Museum visit",
+    id: "Travel Itinerary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
   },
   {
-    note: "# Hesitate\nskdjhaskdh ",
-    id: "Hesitate-d535150a-9577-4246-94f1-96d2e994dbc21",
+    note: "# Book Summary\n## Chapters:\n- Introduction\n- Chapter 1\n- Chapter 2",
+    id: "Book Summary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
   },
   {
-    note: "# Feature dev\n\n1. Connect to DB\n2. update UI (needed as hell) \n3. to work on UX\n\n\n",
-    id: "jakshdjkashd-2138912",
+    note: "# Movie Review\n## Plot:\n- Brief summary\n## Characters:\n- Main characters\n## Review:\n- Overall opinion",
+    id: "Movie Review-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
   },
   {
-    note: "# Hesitate\nskdjhaskdh ",
-    id: "ajskdhajksdsakdj021-3123",
+    note: "# Study Notes\n## Topic:\n- Subject matter\n## Key Points:\n- Important information",
+    id: "Study Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+  },
+  {
+    note: "# Task List\n## Tasks:\n- Task 1\n- Task 2\n- Task 3",
+    id: "Task List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
   },
 ];
