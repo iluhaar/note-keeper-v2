@@ -71,10 +71,6 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
-      backgroundImage: {
-        "switch-unchecked": "url('./src/assets/light.svg)",
-        "switch-checked": "url('./src/assets/dark.svg')",
-      },
     },
   },
   plugins: [require("tailwindcss-animate")],
