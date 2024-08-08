@@ -15,7 +15,7 @@ const fastify = Fastify({
 });
 
 fastify.register(cors, {
-  origin: "http://localhost:5173",
+  origin: "https://note-keeper-px1g.onrender.com",
 });
 fastify.register(getNotes);
 fastify.register(updateNotes);
