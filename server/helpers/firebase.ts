@@ -37,15 +37,6 @@ const getData = async (userId: string) => {
 const updateData = async (data: Data, userId: string) => {
   const databaseRef = ref(database, "notes");
 
-  const snapshot = await get(ref(database, `users/${userId}`));
-  const storedData: Users = snapshot.val();
-
-  if (storedData === null) {
-    return update(databaseRef, {
-      [userId]: mockedNotes,
-    });
-  }
-
   return update(databaseRef, {
     [userId]: data.notes,
   });

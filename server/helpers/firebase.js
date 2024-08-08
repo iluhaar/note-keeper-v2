@@ -42,7 +42,6 @@ var database_1 = require("firebase/database");
 var constants_1 = require("../constants");
 var uuid_1 = require("uuid");
 var hashing_1 = require("./hashing");
-var routes_1 = require("../routes");
 var app = (0, app_1.initializeApp)(constants_1.firebaseConfig);
 var database = (0, database_1.getDatabase)(app);
 var isUserExists = function (email) { return __awaiter(void 0, void 0, void 0, function () {
@@ -82,25 +81,13 @@ var getData = function (userId) { return __awaiter(void 0, void 0, void 0, funct
 }); };
 exports.getData = getData;
 var updateData = function (data, userId) { return __awaiter(void 0, void 0, void 0, function () {
-    var databaseRef, snapshot, storedData;
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                databaseRef = (0, database_1.ref)(database, "notes");
-                return [4 /*yield*/, (0, database_1.get)((0, database_1.ref)(database, "users/".concat(userId)))];
-            case 1:
-                snapshot = _c.sent();
-                storedData = snapshot.val();
-                if (storedData === null) {
-                    return [2 /*return*/, (0, database_1.update)(databaseRef, (_a = {},
-                            _a[userId] = routes_1.mockedNotes,
-                            _a))];
-                }
-                return [2 /*return*/, (0, database_1.update)(databaseRef, (_b = {},
-                        _b[userId] = data.notes,
-                        _b))];
-        }
+    var databaseRef;
+    var _a;
+    return __generator(this, function (_b) {
+        databaseRef = (0, database_1.ref)(database, "notes");
+        return [2 /*return*/, (0, database_1.update)(databaseRef, (_a = {},
+                _a[userId] = data.notes,
+                _a))];
     });
 }); };
 exports.updateData = updateData;
