@@ -25,7 +25,7 @@ fastify.register(registerUser);
 
 const SERVER_PORT = Number(process.env.PORT) || 3000;
 
-fastify.listen({ port: SERVER_PORT }, function (err, address) {
+fastify.listen({ port: SERVER_PORT, host: "0.0.0.0" }, function (err, address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
