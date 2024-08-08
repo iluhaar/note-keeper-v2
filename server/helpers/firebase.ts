@@ -30,7 +30,7 @@ const getData = async (userId: string) => {
 
   const data = snapshot.val();
 
-  if (data === null) return { data: null };
+  if (data === null) return [];
   return data;
 };
 

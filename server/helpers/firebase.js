@@ -75,7 +75,7 @@ var getData = function (userId) { return __awaiter(void 0, void 0, void 0, funct
                 snapshot = _a.sent();
                 data = snapshot.val();
                 if (data === null)
-                    return [2 /*return*/, { data: null }];
+                    return [2 /*return*/, []];
                 return [2 /*return*/, data];
         }
     });
