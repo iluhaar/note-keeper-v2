@@ -1,23 +1,51 @@
-import { update } from "firebase/database";
-import { deleteData, getData, updateData } from "./helpers/firebase";
-import { request } from "http";
+import { FastifyInstance } from "fastify";
 
-const mockedNotes = [
-  {
-    note: "# Summary \n## Functions: \n- add \n- edit\n- preview without editing\n- list node",
-    id: " Summary -641784f3-dc9b-4797-8a2f-b0922a225a75",
-  },
-  {
-    note: "# Feature dev\n\n1. Connect to DB\n2. update UI (needed as hell) \n3. to work on UX\n\n\n",
-    id: "Feature dev-8fafab17-468d-46e5-afef-b981f6d54ee3",
-  },
-  {
-    note: "# Hesitate\nskdjhaskdh ",
-    id: "Hesitate-d535150a-9577-4246-94f1-96d2e994dbc1",
-  },
-];
+import {
+  createUser,
+  deleteData,
+  getData,
+  loginUser,
+  updateData,
+} from "./helpers/firebase";
 
-export async function getNotes(fastify, options) {
+export const mockedNotes = {
+  notes: [
+    {
+      note: "# Shopping List\n## Items:\n- Milk\n- Bread\n- Eggs\n- Cheese",
+      id: "Shopping List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+    },
+    {
+      note: "# Meeting Notes\n## Topics:\n- Project Update\n- Task Assignments\n- Next Steps",
+      id: "Meeting Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+    },
+    {
+      note: "# Recipe\n## Ingredients:\n- Flour\n- Sugar\n- Butter\n## Instructions:\n1. Preheat oven\n2. Mix ingredients",
+      id: "Recipe-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+    },
+    {
+      note: "# Travel Itinerary\n## Days:\n- Day 1: Arrival\n- Day 2: Sightseeing\n- Day 3: Museum visit",
+      id: "Travel Itinerary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+    },
+    {
+      note: "# Book Summary\n## Chapters:\n- Introduction\n- Chapter 1\n- Chapter 2",
+      id: "Book Summary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+    },
+    {
+      note: "# Movie Review\n## Plot:\n- Brief summary\n## Characters:\n- Main characters\n## Review:\n- Overall opinion",
+      id: "Movie Review-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+    },
+    {
+      note: "# Study Notes\n## Topic:\n- Subject matter\n## Key Points:\n- Important information",
+      id: "Study Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+    },
+    {
+      note: "# Task List\n## Tasks:\n- Task 1\n- Task 2\n- Task 3",
+      id: "Task List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+    },
+  ],
+};
+
+export async function getNotes(fastify: FastifyInstance, _options: any) {
   fastify.get("/notes", async (request, reply) => {
     reply.headers({
       "Access-Control-Allow-Origin": "*",
@@ -26,65 +54,115 @@ export async function getNotes(fastify, options) {
       "Access-Control-Allow-Methods": "GET",
     });
 
-    const data = await getData();
+    try {
+      const { userId } = request.query as any;
 
-    return { notes: data };
+      const data = await getData(userId);
+
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   });
 }
 
-export async function updateNotes(fastify, options) {
+export async function updateNotes(fastify: FastifyInstance, _options: any) {
   fastify.post("/note", async (request, reply) => {
     reply.headers({
-      "Access-Control-Allow-Origin": "http://localhost:5173",
+      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers":
         "Origin, X-Requested-With, Content-Type, Accept",
       "Access-Control-Allow-Methods": "POST",
     });
 
     try {
-      await updateData(request.body);
+      const requestBody = request.body as any;
 
-      return { notes: request.body };
+      const { id: userId } = requestBody;
+
+      await updateData(requestBody, userId);
+
+      return { notes: requestBody };
     } catch (error) {
-      console.log("🚀 ~ fastify.post ~ error:", error);
+      console.log(error);
     }
   });
 }
 
-export async function deleteNote(fastify, options) {
+export async function deleteNote(fastify: FastifyInstance, _options: any) {
   fastify.delete("/delete-note", async (request, reply) => {
     reply.headers({
-      "Access-Control-Allow-Origin": "http://localhost:5173",
+      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers":
         "Origin, X-Requested-With, Content-Type, Accept",
       "Access-Control-Allow-Methods": "POST",
     });
 
     try {
-      await deleteData(request.body);
+      const requestBody = request.body as any;
+      const { userId } = requestBody;
+
+      await updateData(requestBody, userId);
 
       return { notes: request.body };
     } catch (error) {
-      console.log("🚀 ~ fastify.post ~ error:", error);
+      console.log(error);
     }
   });
 }
 
-export async function handleLogin(fastify, options) {
+export async function handleLogin(fastify: FastifyInstance, _options: any) {
   fastify.post("/login", async (request, reply) => {
     reply.headers({
-      "Access-Control-Allow-Origin": "http://localhost:5173",
+      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers":
         "Origin, X-Requested-With, Content-Type, Accept",
       "Access-Control-Allow-Methods": "POST",
     });
 
-    const { email } = request.body;
-
-    if (email.includes("ilya")) {
-      return { success: true };
+    try {
+      const requestBody = request.body as any;
+      const data = await loginUser(requestBody);
+      if (data.success === false) {
+        return reply.code(401).send(data);
+      } else {
+        return reply.send(data);
+      }
+    } catch (error) {
+      return { success: false };
     }
-
-    return { success: false };
   });
+}
+
+export async function registerUser(fastify: FastifyInstance, _options: any) {
+  fastify.post("/register", async (request, reply) => {
+    reply.headers({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers":
+        "Origin, X-Requested-With, Content-Type, Accept",
+      "Access-Control-Allow-Methods": "POST",
+    });
+
+    try {
+      const requestBody = request.body as any;
+      const { email, password, name } = requestBody;
+      const data: registerI = await createUser(email, password, name);
+
+      if (data.success === false) {
+        reply.code(409);
+        return reply.send(data);
+      } else {
+        return reply.code(200).send(data);
+      }
+    } catch (error) {
+      console.log("🚀 ~ fastify.post ~ error:", error);
+      return { success: false };
+    }
+  });
+}
+
+interface registerI {
+  success: boolean;
+  error: string | null;
+  data: any;
 }

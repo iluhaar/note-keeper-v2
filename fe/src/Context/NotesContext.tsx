@@ -6,40 +6,36 @@ import {
   useState,
 } from "react";
 
-// import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
 
-// import { updateNotes, getNotes, removeNote } from "../helpers/notes";
+import { updateNotes, getNotes, removeNote } from "../helpers/notes";
+
+import { registerUser as createUser, loginUser } from "../helpers/auth";
 
 export const NotesContext = createContext<Context | null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useNotesContext = () => useContext(NotesContext);
+export const useNotesContext = () => useContext(NotesContext) as Context;
 
 export const NotesProvider = ({ children }: Props) => {
-  const [userNotes, setUserNotes] = useState<UserNotes[]>(mockedNotes);
-  const [userData, setUserData] = useState<UserData | undefined>();
+  const [userNotes, setUserNotes] = useState<UserNotes[]>([]);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [theme, setTheme] = useState(false);
 
-  // const queryClient = useQueryClient();
-  //TODO try to fix the ts error
-  // const { data }: { data: UserNotes[] | [] } = useQuery({
-  //   queryKey: ["notes"],
-  //   queryFn: getNotes,
-  // });
-
-  // useEffect(() => {
-  //   getNotes().then((data) => {
-  //     if (!data) return;
-  //     setUserNotes(data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (userData) {
+      getNotes(userData.id).then((data) => {
+        if (!data) return;
+        setUserNotes(data);
+      });
+    }
+  }, [userData]);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     const parsedUser = user ? JSON.parse(user) : undefined;
-    if (user) {
+    if (user !== null) {
       setIsLoggedIn(true);
       setUserData(parsedUser);
       if (!document.title.includes(parsedUser.name)) {
@@ -53,11 +49,16 @@ export const NotesProvider = ({ children }: Props) => {
     localStorage.removeItem("user");
   };
 
-  const logIn = (email: string, password: string, name: string) => {
-    setIsLoggedIn(true);
-    const userInfo = { email, password, name };
-    localStorage.setItem("user", JSON.stringify(userInfo));
-    setUserData(userInfo);
+  const logIn = async (email: string, password: string) => {
+    return await loginUser(email, password);
+  };
+
+  const registerUser = async (
+    email: string,
+    password: string,
+    name: string
+  ) => {
+    return await createUser(email, password, name);
   };
 
   const addNote = async (note: string) => {
@@ -75,33 +76,29 @@ export const NotesProvider = ({ children }: Props) => {
 
     if (secondWord !== undefined) {
       title = `${firstWord}-${secondWord}`;
+    } else {
+      title = firstWord;
     }
 
-    title = firstWord;
-
     const id = `${title}-${uuid()}`;
-    const updatedNotes = [...userNotes, { id: id, note }];
+    const updatedNotes = [{ id: id, note }, ...userNotes];
 
-    // updateNotes(updatedNotes)
-    // .then((res) => res.json())
-    // .then(() => {
-    return setUserNotes(updatedNotes);
-    // return queryClient.invalidateQueries({ queryKey: ["notes"] });
-    // });
+    if (userData) {
+      updateNotes(updatedNotes, userData?.id, userData?.email)
+        .then((res) => res.json())
+        .then(() => {
+          return setUserNotes(updatedNotes);
+        });
+    }
   };
 
   const deleteNote = async (id: string) => {
     const updatedNotes = userNotes.filter((note: UserNotes) => note.id !== id);
 
-    // removeNote("0");
-    // .then((res) => res.json())
-    // .then((data) => {
-    return setUserNotes(updatedNotes);
-    //   // queryClient.invalidateQueries({ queryKey: ["notes"] });
-    //   return true;
-    // });
-
-    // return false;
+    if (userData) {
+      await removeNote(updatedNotes, userData.id);
+      return setUserNotes(updatedNotes);
+    }
   };
 
   const searchInNotes = (input: string) => {
@@ -119,8 +116,13 @@ export const NotesProvider = ({ children }: Props) => {
       }
       return note;
     });
-
-    return setUserNotes(updatedNotes);
+    if (userData) {
+      updateNotes(updatedNotes, userData?.id, userData?.email)
+        .then((res) => res.json())
+        .then(() => {
+          return setUserNotes(updatedNotes);
+        });
+    }
   };
 
   const toggleTheme = (status: boolean) => {
@@ -147,6 +149,8 @@ export const NotesProvider = ({ children }: Props) => {
         editNote,
         theme,
         toggleTheme,
+        registerUser,
+        setIsLoggedIn,
       }}
     >
       {children}
@@ -157,38 +161,3 @@ export const NotesProvider = ({ children }: Props) => {
 interface Props {
   children: ReactElement;
 }
-
-export const mockedNotes = [
-  {
-    note: "# Shopping List\n## Items:\n- Milk\n- Bread\n- Eggs\n- Cheese",
-    id: "Shopping List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-  },
-  {
-    note: "# Meeting Notes\n## Topics:\n- Project Update\n- Task Assignments\n- Next Steps",
-    id: "Meeting Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-  },
-  {
-    note: "# Recipe\n## Ingredients:\n- Flour\n- Sugar\n- Butter\n## Instructions:\n1. Preheat oven\n2. Mix ingredients",
-    id: "Recipe-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-  },
-  {
-    note: "# Travel Itinerary\n## Days:\n- Day 1: Arrival\n- Day 2: Sightseeing\n- Day 3: Museum visit",
-    id: "Travel Itinerary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-  },
-  {
-    note: "# Book Summary\n## Chapters:\n- Introduction\n- Chapter 1\n- Chapter 2",
-    id: "Book Summary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-  },
-  {
-    note: "# Movie Review\n## Plot:\n- Brief summary\n## Characters:\n- Main characters\n## Review:\n- Overall opinion",
-    id: "Movie Review-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-  },
-  {
-    note: "# Study Notes\n## Topic:\n- Subject matter\n## Key Points:\n- Important information",
-    id: "Study Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-  },
-  {
-    note: "# Task List\n## Tasks:\n- Task 1\n- Task 2\n- Task 3",
-    id: "Task List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-  },
-];

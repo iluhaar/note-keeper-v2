@@ -1,19 +1,6 @@
-interface IQuerystring {
-  username: string;
+interface Users {
+  email: string;
   password: string;
-}
-
-interface IHeaders {
-  "h-Custom": string;
-}
-
-interface IReply {
-  200: { success: boolean };
-  302: { url: string };
-  "4xx": { error: string };
-}
-
-interface UserNotes {
-  id: number | string;
-  note: string;
+  name: string;
+  id: string;
 }

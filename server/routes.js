@@ -36,31 +36,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.mockedNotes = void 0;
 exports.getNotes = getNotes;
 exports.updateNotes = updateNotes;
 exports.deleteNote = deleteNote;
 exports.handleLogin = handleLogin;
+exports.registerUser = registerUser;
 var firebase_1 = require("./helpers/firebase");
-var mockedNotes = [
-    {
-        note: "# Summary \n## Functions: \n- add \n- edit\n- preview without editing\n- list node",
-        id: " Summary -641784f3-dc9b-4797-8a2f-b0922a225a75",
-    },
-    {
-        note: "# Feature dev\n\n1. Connect to DB\n2. update UI (needed as hell) \n3. to work on UX\n\n\n",
-        id: "Feature dev-8fafab17-468d-46e5-afef-b981f6d54ee3",
-    },
-    {
-        note: "# Hesitate\nskdjhaskdh ",
-        id: "Hesitate-d535150a-9577-4246-94f1-96d2e994dbc1",
-    },
-];
-function getNotes(fastify, options) {
+exports.mockedNotes = {
+    notes: [
+        {
+            note: "# Shopping List\n## Items:\n- Milk\n- Bread\n- Eggs\n- Cheese",
+            id: "Shopping List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+        },
+        {
+            note: "# Meeting Notes\n## Topics:\n- Project Update\n- Task Assignments\n- Next Steps",
+            id: "Meeting Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+        },
+        {
+            note: "# Recipe\n## Ingredients:\n- Flour\n- Sugar\n- Butter\n## Instructions:\n1. Preheat oven\n2. Mix ingredients",
+            id: "Recipe-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+        },
+        {
+            note: "# Travel Itinerary\n## Days:\n- Day 1: Arrival\n- Day 2: Sightseeing\n- Day 3: Museum visit",
+            id: "Travel Itinerary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+        },
+        {
+            note: "# Book Summary\n## Chapters:\n- Introduction\n- Chapter 1\n- Chapter 2",
+            id: "Book Summary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+        },
+        {
+            note: "# Movie Review\n## Plot:\n- Brief summary\n## Characters:\n- Main characters\n## Review:\n- Overall opinion",
+            id: "Movie Review-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+        },
+        {
+            note: "# Study Notes\n## Topic:\n- Subject matter\n## Key Points:\n- Important information",
+            id: "Study Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+        },
+        {
+            note: "# Task List\n## Tasks:\n- Task 1\n- Task 2\n- Task 3",
+            id: "Task List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
+        },
+    ],
+};
+function getNotes(fastify, _options) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
             fastify.get("/notes", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var data;
+                var userId, data, error_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -69,10 +93,19 @@ function getNotes(fastify, options) {
                                 "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
                                 "Access-Control-Allow-Methods": "GET",
                             });
-                            return [4 /*yield*/, (0, firebase_1.getData)()];
+                            _a.label = 1;
                         case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            userId = request.query.userId;
+                            return [4 /*yield*/, (0, firebase_1.getData)(userId)];
+                        case 2:
                             data = _a.sent();
-                            return [2 /*return*/, { notes: data }];
+                            return [2 /*return*/, data];
+                        case 3:
+                            error_1 = _a.sent();
+                            console.log(error_1);
+                            return [3 /*break*/, 4];
+                        case 4: return [2 /*return*/];
                     }
                 });
             }); });
@@ -80,30 +113,32 @@ function getNotes(fastify, options) {
         });
     });
 }
-function updateNotes(fastify, options) {
+function updateNotes(fastify, _options) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
             fastify.post("/note", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var error_1;
+                var requestBody, userId, error_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             reply.headers({
-                                "Access-Control-Allow-Origin": "http://localhost:5173",
+                                "Access-Control-Allow-Origin": "*",
                                 "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
                                 "Access-Control-Allow-Methods": "POST",
                             });
                             _a.label = 1;
                         case 1:
                             _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, (0, firebase_1.updateData)(request.body)];
+                            requestBody = request.body;
+                            userId = requestBody.id;
+                            return [4 /*yield*/, (0, firebase_1.updateData)(requestBody, userId)];
                         case 2:
                             _a.sent();
-                            return [2 /*return*/, { notes: request.body }];
+                            return [2 /*return*/, { notes: requestBody }];
                         case 3:
-                            error_1 = _a.sent();
-                            console.log("🚀 ~ fastify.post ~ error:", error_1);
+                            error_2 = _a.sent();
+                            console.log(error_2);
                             return [3 /*break*/, 4];
                         case 4: return [2 /*return*/];
                     }
@@ -113,30 +148,32 @@ function updateNotes(fastify, options) {
         });
     });
 }
-function deleteNote(fastify, options) {
+function deleteNote(fastify, _options) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
             fastify.delete("/delete-note", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var error_2;
+                var requestBody, userId, error_3;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             reply.headers({
-                                "Access-Control-Allow-Origin": "http://localhost:5173",
+                                "Access-Control-Allow-Origin": "*",
                                 "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
                                 "Access-Control-Allow-Methods": "POST",
                             });
                             _a.label = 1;
                         case 1:
                             _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, (0, firebase_1.deleteData)(request.body)];
+                            requestBody = request.body;
+                            userId = requestBody.userId;
+                            return [4 /*yield*/, (0, firebase_1.updateData)(requestBody, userId)];
                         case 2:
                             _a.sent();
                             return [2 /*return*/, { notes: request.body }];
                         case 3:
-                            error_2 = _a.sent();
-                            console.log("🚀 ~ fastify.post ~ error:", error_2);
+                            error_3 = _a.sent();
+                            console.log(error_3);
                             return [3 /*break*/, 4];
                         case 4: return [2 /*return*/];
                     }
@@ -146,23 +183,81 @@ function deleteNote(fastify, options) {
         });
     });
 }
-function handleLogin(fastify, options) {
+function handleLogin(fastify, _options) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
             fastify.post("/login", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var email;
+                var requestBody, data, error_4;
                 return __generator(this, function (_a) {
-                    reply.headers({
-                        "Access-Control-Allow-Origin": "http://localhost:5173",
-                        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-                        "Access-Control-Allow-Methods": "POST",
-                    });
-                    email = request.body.email;
-                    if (email.includes("ilya")) {
-                        return [2 /*return*/, { success: true }];
+                    switch (_a.label) {
+                        case 0:
+                            reply.headers({
+                                "Access-Control-Allow-Origin": "*",
+                                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                                "Access-Control-Allow-Methods": "POST",
+                            });
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            requestBody = request.body;
+                            return [4 /*yield*/, (0, firebase_1.loginUser)(requestBody)];
+                        case 2:
+                            data = _a.sent();
+                            if (data.success === false) {
+                                return [2 /*return*/, reply.code(401).send(data)];
+                            }
+                            else {
+                                return [2 /*return*/, reply.send(data)];
+                            }
+                            return [3 /*break*/, 4];
+                        case 3:
+                            error_4 = _a.sent();
+                            return [2 /*return*/, { success: false }];
+                        case 4: return [2 /*return*/];
                     }
-                    return [2 /*return*/, { success: false }];
+                });
+            }); });
+            return [2 /*return*/];
+        });
+    });
+}
+function registerUser(fastify, _options) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _this = this;
+        return __generator(this, function (_a) {
+            fastify.post("/register", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+                var requestBody, email, password, name_1, data, error_5;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            reply.headers({
+                                "Access-Control-Allow-Origin": "*",
+                                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                                "Access-Control-Allow-Methods": "POST",
+                            });
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            requestBody = request.body;
+                            email = requestBody.email, password = requestBody.password, name_1 = requestBody.name;
+                            return [4 /*yield*/, (0, firebase_1.createUser)(email, password, name_1)];
+                        case 2:
+                            data = _a.sent();
+                            if (data.success === false) {
+                                reply.code(409);
+                                return [2 /*return*/, reply.send(data)];
+                            }
+                            else {
+                                return [2 /*return*/, reply.code(200).send(data)];
+                            }
+                            return [3 /*break*/, 4];
+                        case 3:
+                            error_5 = _a.sent();
+                            console.log("🚀 ~ fastify.post ~ error:", error_5);
+                            return [2 /*return*/, { success: false }];
+                        case 4: return [2 /*return*/];
+                    }
                 });
             }); });
             return [2 /*return*/];

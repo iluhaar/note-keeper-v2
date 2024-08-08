@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,40 +36,152 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteData = exports.updateData = exports.getData = void 0;
+exports.createUser = exports.loginUser = exports.deleteData = exports.updateData = exports.getData = void 0;
 var app_1 = require("firebase/app");
 var database_1 = require("firebase/database");
 var constants_1 = require("../constants");
+var uuid_1 = require("uuid");
+var hashing_1 = require("./hashing");
+var routes_1 = require("../routes");
 var app = (0, app_1.initializeApp)(constants_1.firebaseConfig);
 var database = (0, database_1.getDatabase)(app);
-var getData = function () { return __awaiter(void 0, void 0, void 0, function () {
+var isUserExists = function (email) { return __awaiter(void 0, void 0, void 0, function () {
+    var snapshot, storedData;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, database_1.get)((0, database_1.ref)(database, "users"))];
+            case 1:
+                snapshot = _a.sent();
+                try {
+                    storedData = snapshot.val();
+                    if (storedData != null) {
+                        return [2 /*return*/, Object.values(storedData).some(function (u) { return u.email === email; })];
+                    }
+                    return [2 /*return*/, false];
+                }
+                catch (error) {
+                    console.log("🚀 ~ isUserExists ~ error:", error);
+                }
+                return [2 /*return*/];
+        }
+    });
+}); };
+var getData = function (userId) { return __awaiter(void 0, void 0, void 0, function () {
     var snapshot, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, database_1.get)((0, database_1.ref)(database, "notes"))];
+            case 0: return [4 /*yield*/, (0, database_1.get)((0, database_1.ref)(database, "notes/".concat(userId)))];
             case 1:
                 snapshot = _a.sent();
                 data = snapshot.val();
+                if (data === null)
+                    return [2 /*return*/, { data: null }];
                 return [2 /*return*/, data];
         }
     });
 }); };
 exports.getData = getData;
-var updateData = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var databaseRef;
-    return __generator(this, function (_a) {
-        databaseRef = (0, database_1.ref)(database, "notes");
-        return [2 /*return*/, (0, database_1.update)(databaseRef, __assign({}, data))];
+var updateData = function (data, userId) { return __awaiter(void 0, void 0, void 0, function () {
+    var databaseRef, snapshot, storedData;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                databaseRef = (0, database_1.ref)(database, "notes");
+                return [4 /*yield*/, (0, database_1.get)((0, database_1.ref)(database, "notes/".concat(userId)))];
+            case 1:
+                snapshot = _c.sent();
+                storedData = snapshot.val();
+                if (storedData === null) {
+                    return [2 /*return*/, (0, database_1.update)(databaseRef, (_a = {},
+                            _a[userId] = routes_1.mockedNotes,
+                            _a))];
+                }
+                return [2 /*return*/, (0, database_1.update)(databaseRef, (_b = {},
+                        _b[userId] = data.notes,
+                        _b))];
+        }
     });
 }); };
 exports.updateData = updateData;
-var deleteData = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var databaseRef;
+var loginUser = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var password, email, snapshot, storedData, userData, storedPassword, isValid;
     return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                password = data.password, email = data.email;
+                return [4 /*yield*/, (0, database_1.get)((0, database_1.ref)(database, "users"))];
+            case 1:
+                snapshot = _a.sent();
+                storedData = snapshot.val();
+                userData = Object.values(storedData).find(function (u) { return u.email === email; });
+                if (userData === undefined) {
+                    return [2 /*return*/, { success: false, error: "User is not exists" }];
+                }
+                storedPassword = userData.password;
+                return [4 /*yield*/, (0, hashing_1.verifyPassword)(storedPassword, password)];
+            case 2:
+                isValid = _a.sent();
+                if (!isValid) {
+                    return [2 /*return*/, { success: false, error: "Password is incorrect" }];
+                }
+                return [2 /*return*/, { success: true, error: null, data: userData }];
+        }
+    });
+}); };
+exports.loginUser = loginUser;
+var createUser = function (email, password, name) { return __awaiter(void 0, void 0, void 0, function () {
+    var databaseRef, isUserPresent, id, userData, error_1;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                databaseRef = (0, database_1.ref)(database, "users");
+                return [4 /*yield*/, isUserExists(email)];
+            case 1:
+                isUserPresent = _c.sent();
+                if (isUserPresent) {
+                    return [2 /*return*/, {
+                            success: false,
+                            error: "User all ready exists",
+                            data: null,
+                        }];
+                }
+                id = "".concat(name, "-").concat((0, uuid_1.v4)());
+                _a = {
+                    name: name,
+                    email: email
+                };
+                return [4 /*yield*/, (0, hashing_1.hashPassword)(password)];
+            case 2:
+                userData = (_a.password = _c.sent(),
+                    _a.id = id,
+                    _a);
+                _c.label = 3;
+            case 3:
+                _c.trys.push([3, 5, , 6]);
+                return [4 /*yield*/, (0, database_1.update)(databaseRef, (_b = {}, _b[id] = userData, _b))];
+            case 4:
+                _c.sent();
+                delete userData.password;
+                return [2 /*return*/, { success: true, error: null, data: userData }];
+            case 5:
+                error_1 = _c.sent();
+                console.log(error_1);
+                return [2 /*return*/, { success: false, error: error_1, data: null }];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+exports.createUser = createUser;
+var deleteData = function (data, id) { return __awaiter(void 0, void 0, void 0, function () {
+    var databaseRef;
+    var _a;
+    return __generator(this, function (_b) {
         databaseRef = (0, database_1.ref)(database, "/notes/".concat(id));
-        return [2 /*return*/, (0, database_1.remove)(databaseRef).then(function (d) {
-                console.log(d);
-            })];
+        return [2 /*return*/, (0, database_1.update)(databaseRef, (_a = {},
+                _a[id] = data.notes,
+                _a))];
     });
 }); };
 exports.deleteData = deleteData;

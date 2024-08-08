@@ -31,7 +31,7 @@ const NavBar = () => {
   };
 
   let content;
-  if (userNotes?.length) {
+  if (userNotes?.length > 0) {
     content = (
       <ol className="hidden sm:block sm:h-[100%] list-decimal mt-2 pl-4">
         {userNotes?.map(({ note, id }: UserNotes) => {
