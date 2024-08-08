@@ -16,19 +16,19 @@ const Note = ({ note, id }: UserNotes) => {
     .replaceAll("#", "");
 
   return (
-    <Card className="flex-1 text-left p-5 dark:bg-slate-800 shadow-sm h-80 max-w-[174px] min-h-[175px] sm:min-w-[15rem] w-[15rem]">
-      <CardTitle className="flex flex-row justify-between items-center">
+    <Card className="flex-1 text-left sm:p-5 dark:bg-slate-800 shadow-sm h-80  w-[12rem] min-h-[175px] sm:min-w-[15rem] sm:max-w-[174px] p-2">
+      <CardTitle className="flex flex-row justify-between items-center pl-1 pt-2">
         <Link to={`${id}`}>{title}</Link>
         <span
           title="delete"
-          className="cursor-pointer text-slate-100 hover:text-slate-500"
+          className="cursor-pointer text-slate-400 hover:text-slate-500 dark:hover:text-slate-400"
           onClick={() => deleteNote(id)}
         >
           X
         </span>
       </CardTitle>
       <CardContent className="pt-10 w-[150px] h-[200px]">
-        <p className="w-[150px] h-[200px] max-h-[200px] text-ellipsis overflow-hidden">
+        <p className="max-h-[150px] text-ellipsis overflow-hidden sm:w-[150px] sm:h-[200px] sm:max-h-[200px] ">
           {content}
         </p>
       </CardContent>

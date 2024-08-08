@@ -24,10 +24,10 @@ const AuthForm = ({
   error,
 }: Props) => {
   const [inputType, setInputType] = useState<"password" | "text">("password");
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(false);
 
   const handleShowPassword = (status: boolean) => {
-    const inputType = status ? "password" : "text";
+    const inputType = status ? "text" : "password";
     setInputType(inputType);
     setChecked((prev) => !prev);
   };

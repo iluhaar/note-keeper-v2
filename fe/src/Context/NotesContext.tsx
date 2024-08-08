@@ -50,7 +50,9 @@ export const NotesProvider = ({ children }: Props) => {
   };
 
   const logIn = async (email: string, password: string) => {
-    return await loginUser(email, password);
+    const data = await loginUser(email, password);
+    setUserData(data.data);
+    return data;
   };
 
   const registerUser = async (
@@ -82,7 +84,6 @@ export const NotesProvider = ({ children }: Props) => {
 
     const id = `${title}-${uuid()}`;
     const updatedNotes = [{ id: id, note }, ...userNotes];
-
     if (userData) {
       updateNotes(updatedNotes, userData?.id, userData?.email)
         .then((res) => res.json())
