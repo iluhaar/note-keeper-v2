@@ -2,6 +2,8 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 
+const origin = process.env.ORIGIN || "http://localhost:5173";
+
 import {
   deleteNote,
   getNotes,
@@ -15,7 +17,7 @@ const fastify = Fastify({
 });
 
 fastify.register(cors, {
-  origin: "https://note-keeper-px1g.onrender.com",
+  origin: origin,
 });
 fastify.register(getNotes);
 fastify.register(updateNotes);
@@ -23,6 +25,7 @@ fastify.register(deleteNote);
 fastify.register(handleLogin);
 fastify.register(registerUser);
 
+console.log(fastify, "🚀");
 const SERVER_PORT = Number(process.env.PORT) || 3000;
 
 fastify.listen({ port: SERVER_PORT, host: "0.0.0.0" }, function (err, address) {
