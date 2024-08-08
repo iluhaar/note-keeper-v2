@@ -1,5 +1,7 @@
+import { BASE_URL } from "@/constants";
+
 const updateNotes = (notes: UserNotes[], id: string, email: string) => {
-  return fetch("http://localhost:3000/note", {
+  return fetch(`${BASE_URL}/note`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -11,9 +13,7 @@ const updateNotes = (notes: UserNotes[], id: string, email: string) => {
 
 const getNotes = async (userId: string): Promise<UserNotes[] | []> => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/notes?userId=${userId}`
-    );
+    const response = await fetch(`${BASE_URL}/notes?userId=${userId}`);
     const data = await response.json();
 
     if (data === undefined && data.notes === undefined) return [];
@@ -27,7 +27,7 @@ const getNotes = async (userId: string): Promise<UserNotes[] | []> => {
 
 const removeNote = async (notes: UserNotes[], id: string): Promise<void> => {
   try {
-    const response = await fetch("http://localhost:3000/delete-note", {
+    const response = await fetch(`${BASE_URL}/delete-note`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

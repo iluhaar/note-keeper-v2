@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useNotesContext } from "../../Context/NotesContext";
 
-import { APP_NAME } from "../../contants";
+import { APP_NAME } from "@/constants";
 
 import Account from "../Account/Account";
 

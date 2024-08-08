@@ -1,3 +1,5 @@
+import { BASE_URL } from "@/constants.ts";
+
 const loginUser = async (
   email: string,
   password: string
@@ -9,7 +11,7 @@ const loginUser = async (
   data: any;
 }> => {
   try {
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +48,7 @@ const registerUser = async (
   data: any;
 }> => {
   try {
-    const response = await fetch("http://localhost:3000/register", {
+    const response = await fetch(`${BASE_URL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

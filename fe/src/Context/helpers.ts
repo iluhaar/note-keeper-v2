@@ -1,6 +1,8 @@
+import { BASE_URL } from "@/constants";
+
 const getNotes = async (): Promise<UserNotes[]> => {
   try {
-    const response = await fetch("http://localhost:3000/notes");
+    const response = await fetch(`${BASE_URL}/notes`);
     const data = await response.json();
     return data.notes;
   } catch (error) {
@@ -12,7 +14,7 @@ const getNotes = async (): Promise<UserNotes[]> => {
 
 const logIn = async (email: string, password: string, name: string) => {
   try {
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
