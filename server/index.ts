@@ -23,7 +23,9 @@ fastify.register(deleteNote);
 fastify.register(handleLogin);
 fastify.register(registerUser);
 
-fastify.listen({ port: 3000 }, function (err, address) {
+const SERVER_PORT = Number(process.env.PORT) || 3000;
+
+fastify.listen({ port: SERVER_PORT }, function (err, address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
