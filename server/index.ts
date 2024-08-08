@@ -1,10 +1,15 @@
 // ESM
 import Fastify from "fastify";
-import { deleteNote, getNotes, updateNotes } from "./routes.js";
 import cors from "@fastify/cors";
-/**
- * @type {import('fastify').FastifyInstance} Instance of Fastify
- */
+
+import {
+  deleteNote,
+  getNotes,
+  handleLogin,
+  registerUser,
+  updateNotes,
+} from "./routes.js";
+
 const fastify = Fastify({
   logger: true,
 });
@@ -15,11 +20,13 @@ fastify.register(cors, {
 fastify.register(getNotes);
 fastify.register(updateNotes);
 fastify.register(deleteNote);
+fastify.register(handleLogin);
+fastify.register(registerUser);
 
 fastify.listen({ port: 3000 }, function (err, address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
   }
-  // Server is now listening on ${address}
+  // console.log(`Server is now listening on ${address}`);
 });
