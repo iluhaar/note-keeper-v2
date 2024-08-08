@@ -88,7 +88,7 @@ var updateData = function (data, userId) { return __awaiter(void 0, void 0, void
         switch (_c.label) {
             case 0:
                 databaseRef = (0, database_1.ref)(database, "notes");
-                return [4 /*yield*/, (0, database_1.get)((0, database_1.ref)(database, "notes/".concat(userId)))];
+                return [4 /*yield*/, (0, database_1.get)((0, database_1.ref)(database, "users/".concat(userId)))];
             case 1:
                 snapshot = _c.sent();
                 storedData = snapshot.val();

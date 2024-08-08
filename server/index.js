@@ -16,7 +16,6 @@ fastify.register(routes_js_1.updateNotes);
 fastify.register(routes_js_1.deleteNote);
 fastify.register(routes_js_1.handleLogin);
 fastify.register(routes_js_1.registerUser);
-console.log(fastify, "🚀");
 var SERVER_PORT = Number(process.env.PORT) || 3000;
 fastify.listen({ port: SERVER_PORT, host: "0.0.0.0" }, function (err, address) {
     if (err) {
