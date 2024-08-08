@@ -22,12 +22,13 @@ const NotePreview = () => {
   };
 
   return (
-    <div className="gap-2 flex flex-col h-full">
-      <MDEditor.Markdown
+    <div className="gap-2 flex flex-col h-full sm:w-full">
+      <MDEditor
         data-color-mode={theme ? "dark" : "light"}
-        source={note}
+        value={note}
         style={{ whiteSpace: "pre-wrap" }}
-        className="h-full p-5"
+        className="w-[90%] sm:w-full !h-[75vh] sm:!h-[90vh]"
+        preview="preview"
       />
       <div className="flex flex-row gap-2 flex-start">
         <Link to={`/editor/${id}`}>

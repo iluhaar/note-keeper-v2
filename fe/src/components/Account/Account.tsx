@@ -4,7 +4,12 @@ import { Card, CardContent, CardTitle } from "../ui/card";
 const Account = () => {
   const { userData } = useNotesContext() as Context;
 
-  if (userData === undefined || Object.keys(userData).length === 0) return;
+  if (
+    userData === undefined ||
+    userData === null ||
+    Object.keys(userData).length === 0
+  )
+    return null;
 
   return (
     <Card className="p-2 w-45 mt-3">

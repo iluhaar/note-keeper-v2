@@ -1,19 +1,23 @@
-const updateNotes = (notes: UserNotes[]) => {
+const updateNotes = (notes: UserNotes[], id: string, email: string) => {
   return fetch("http://localhost:3000/note", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
-    body: JSON.stringify([...notes]),
+    body: JSON.stringify({ id, email, notes }),
   });
 };
 
-const getNotes = async (): Promise<UserNotes[]> => {
+const getNotes = async (userId: string): Promise<UserNotes[] | []> => {
   try {
-    const response = await fetch("http://localhost:3000/notes");
+    const response = await fetch(
+      `http://localhost:3000/notes?userId=${userId}`
+    );
     const data = await response.json();
-    return data.notes;
+
+    if (data === undefined && data.notes === undefined) return [];
+    return data || [];
   } catch (error) {
     console.error(error);
 
@@ -21,7 +25,7 @@ const getNotes = async (): Promise<UserNotes[]> => {
   }
 };
 
-const removeNote = async (id: string): Promise<void> => {
+const removeNote = async (notes: UserNotes[], id: string): Promise<void> => {
   try {
     const response = await fetch("http://localhost:3000/delete-note", {
       method: "DELETE",
@@ -29,7 +33,7 @@ const removeNote = async (id: string): Promise<void> => {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ notes, userId: id }),
     });
 
     const data = await response.json();
