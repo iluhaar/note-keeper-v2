@@ -16,8 +16,8 @@ const Note = ({ note, id }: UserNotes) => {
     .replaceAll("#", "");
 
   return (
-    <Card className="flex-1 text-left sm:p-5 dark:bg-slate-800 shadow-sm h-80  w-[12rem] min-h-[175px] sm:min-w-[15rem] sm:max-w-[174px] p-2">
-      <CardTitle className="flex flex-row justify-between items-center pl-1 pt-2">
+    <Card className="flex-1 text-left sm:p-5 dark:bg-slate-800 shadow-sm h-80  w-[12rem] max-w-[180px] min-h-[175px] p-2 sm:min-w-[15rem] sm:max-w-[174px]">
+      <CardTitle className="flex flex-row justify-between items-center pl-1 pt-1">
         <Link to={`${id}`}>{title}</Link>
         <span
           title="delete"
@@ -28,7 +28,7 @@ const Note = ({ note, id }: UserNotes) => {
         </span>
       </CardTitle>
       <CardContent className="pt-10 w-[150px] h-[200px]">
-        <p className="max-h-[150px] text-ellipsis overflow-hidden sm:w-[150px] sm:h-[200px] sm:max-h-[200px] ">
+        <p className="max-h-[150px] text-ellipsis overflow-hidden sm:w-[150px] sm:h-[200px] sm:max-h-[175px] ">
           {content}
         </p>
       </CardContent>

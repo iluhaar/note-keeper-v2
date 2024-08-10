@@ -28,7 +28,7 @@ export function Login() {
         return setTimeout(() => {
           setIsLoggedIn(true);
           setProgress(100);
-          navigate("/editor");
+          navigate("/notes");
         }, 700);
       }
 
@@ -48,7 +48,7 @@ export function Login() {
         return setTimeout(() => {
           setIsLoggedIn(true);
           setProgress(100);
-          navigate("/editor");
+          navigate("/notes");
         }, 700);
       }
 
