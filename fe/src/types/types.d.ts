@@ -42,4 +42,5 @@ interface Context {
   }>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setIsLoggedIn: (arg: boolean) => void;
+  isLoading: boolean;
 }
