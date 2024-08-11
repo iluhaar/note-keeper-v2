@@ -66,7 +66,7 @@ export const NotesProvider = ({ children }: Props) => {
     return await createUser(email, password, name);
   };
 
-  const addNote = async (note: string) => {
+  const addNote = async (note: string, tags: string[] | []) => {
     let title = "";
     const firstWord = note
       .split("\n")[0]
@@ -86,7 +86,7 @@ export const NotesProvider = ({ children }: Props) => {
     }
 
     const id = `${title}-${uuid()}`;
-    const updatedNotes = [{ id: id, note }, ...userNotes];
+    const updatedNotes = [{ id: id, note, tags }, ...userNotes];
     if (userData) {
       setIsLoading(true);
       updateNotes(updatedNotes, userData?.id, userData?.email)

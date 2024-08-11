@@ -1,6 +1,7 @@
 interface UserNotes {
   id: string;
   note: string;
+  tags: string[];
 }
 
 interface UserData {
@@ -12,7 +13,7 @@ interface UserData {
 
 interface Context {
   userNotes: UserNotes[] | [];
-  addNote: (note: string) => void;
+  addNote: (note: string, tags: string[] | []) => void;
   isLoggedIn: boolean;
   logIn: (
     email: string,

@@ -1,4 +1,5 @@
 import { useNotesContext } from "../../Context/NotesContext";
+import Tag from "../Tag/Tag";
 import Note from "./Note";
 
 const Notes = () => {
@@ -8,9 +9,23 @@ const Notes = () => {
     <>
       <div className="flex flex-row gap-2 mt-2 pl-5 flex-wrap pb-4 items-left content-left sm:content-start sm:items-start sm:pl-0">
         {userNotes && userNotes.length > 0 ? (
-          userNotes.map(({ note, id }: UserNotes) => (
-            <Note key={id} note={note} id={id} />
-          ))
+          userNotes.map(({ note, id, tags }: UserNotes) => {
+            return (
+              <div className="flex flex-col">
+                {tags && tags.length > 0 && (
+                  <div
+                    className="flex flex-row flex-wrap max-w-[180px] sm:max-w-[174px]"
+                    key={id}
+                  >
+                    {tags.map((tag) => (
+                      <Tag value={tag} key={tag} />
+                    ))}
+                  </div>
+                )}
+                <Note note={note} id={id} tags={[]} />
+              </div>
+            );
+          })
         ) : (
           <h2>No notes yet</h2>
         )}
