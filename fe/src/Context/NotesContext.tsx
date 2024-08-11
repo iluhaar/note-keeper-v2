@@ -22,12 +22,15 @@ export const NotesProvider = ({ children }: Props) => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [theme, setTheme] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (userData) {
+      setIsLoading(true);
       getNotes(userData.id).then((data) => {
         if (!data) return;
         setUserNotes(data);
+        return setIsLoading(false);
       });
     }
   }, [userData]);
@@ -63,7 +66,7 @@ export const NotesProvider = ({ children }: Props) => {
     return await createUser(email, password, name);
   };
 
-  const addNote = async (note: string) => {
+  const addNote = async (note: string, tags: string[] | []) => {
     let title = "";
     const firstWord = note
       .split("\n")[0]
@@ -83,13 +86,16 @@ export const NotesProvider = ({ children }: Props) => {
     }
 
     const id = `${title}-${uuid()}`;
-    const updatedNotes = [{ id: id, note }, ...userNotes];
+    const updatedNotes = [{ id: id, note, tags }, ...userNotes];
     if (userData) {
+      setIsLoading(true);
       updateNotes(updatedNotes, userData?.id, userData?.email)
         .then((res) => res.json())
         .then(() => {
+          setIsLoading(false);
           return setUserNotes(updatedNotes);
-        });
+        })
+        .catch((error) => console.error(error));
     }
   };
 
@@ -97,7 +103,9 @@ export const NotesProvider = ({ children }: Props) => {
     const updatedNotes = userNotes.filter((note: UserNotes) => note.id !== id);
 
     if (userData) {
+      setIsLoading(true);
       await removeNote(updatedNotes, userData.id);
+      setIsLoading(false);
       return setUserNotes(updatedNotes);
     }
   };
@@ -118,11 +126,15 @@ export const NotesProvider = ({ children }: Props) => {
       return note;
     });
     if (userData) {
+      setIsLoading(true);
+
       updateNotes(updatedNotes, userData?.id, userData?.email)
         .then((res) => res.json())
         .then(() => {
+          setIsLoading(false);
           return setUserNotes(updatedNotes);
-        });
+        })
+        .catch((error) => console.error(error));
     }
   };
 
@@ -152,6 +164,7 @@ export const NotesProvider = ({ children }: Props) => {
         toggleTheme,
         registerUser,
         setIsLoggedIn,
+        isLoading,
       }}
     >
       {children}
