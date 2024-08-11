@@ -11,7 +11,7 @@ const Editor = ({ place }: Props) => {
   const { addNote, userNotes, editNote, theme } = useNotesContext() as Context;
 
   const [value, setValue] = useState<string | undefined>("");
-  const [tags, setTags] = useState([]);
+  const [tags] = useState([]);
 
   const handleSave = (value: string) => {
     if (id) {
@@ -40,7 +40,7 @@ const Editor = ({ place }: Props) => {
         data-color-mode={theme ? "dark" : "light"}
         value={value}
         className="w-[90%] sm:w-full !h-[75vh] sm:!h-[90vh]"
-        onChange={(e: string) => setValue(e)}
+        onChange={setValue}
         visibleDragbar={false}
       />
 
