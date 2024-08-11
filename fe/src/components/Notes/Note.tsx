@@ -24,6 +24,7 @@ const Note = ({ note, id }: UserNotes) => {
             title="delete"
             className="cursor-pointer text-slate-400 hover:text-slate-500 dark:hover:text-slate-400"
             onClick={() => deleteNote(id)}
+            role="button"
           >
             X
           </span>
