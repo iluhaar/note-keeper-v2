@@ -18,7 +18,7 @@ interface UserData {
 
 interface Context {
   userNotes: UserNotes[] | [];
-  addNote: (note: string, tags: string[] | []) => void;
+  addNote: (note: string, tags: Tag[] | []) => void;
   isLoggedIn: boolean;
   logIn: (
     email: string,

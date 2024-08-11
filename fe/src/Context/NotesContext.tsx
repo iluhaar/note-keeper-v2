@@ -66,7 +66,7 @@ export const NotesProvider = ({ children }: Props) => {
     return await createUser(email, password, name);
   };
 
-  const addNote = async (note: string, tags: string[] | []) => {
+  const addNote = async (note: string, tags: Tag[] | []) => {
     let title = "";
     const firstWord = note
       .split("\n")[0]
