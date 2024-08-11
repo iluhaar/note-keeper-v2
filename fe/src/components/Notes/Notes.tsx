@@ -5,6 +5,7 @@ import Note from "./Note";
 const Notes = () => {
   const { userNotes } = useNotesContext() as Context;
 
+  if (!userNotes) return null;
   return (
     <>
       <div className="flex flex-row gap-2 mt-2 pl-5 flex-wrap pb-4 items-left content-left sm:content-start sm:items-start sm:pl-0">
@@ -18,11 +19,15 @@ const Notes = () => {
                     key={id}
                   >
                     {tags.map((tag) => (
-                      <Tag value={tag} key={tag} />
+                      <Tag
+                        key={tag.label}
+                        label={tag.label}
+                        color={tag.color}
+                      />
                     ))}
                   </div>
                 )}
-                <Note note={note} id={id} tags={[]} />
+                <Note key={id} note={note} id={id} />
               </div>
             );
           })

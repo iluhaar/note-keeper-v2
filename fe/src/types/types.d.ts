@@ -1,7 +1,12 @@
 interface UserNotes {
   id: string;
   note: string;
-  tags: string[];
+  tags: Tag[];
+}
+
+interface Tag {
+  color: string;
+  label: string;
 }
 
 interface UserData {

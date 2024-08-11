@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useNotesContext } from "@/Context/NotesContext";
 
-const Note = ({ note, id }: UserNotes) => {
+const Note = ({ note, id }: Props) => {
   const { deleteNote } = useNotesContext() as Context;
 
   const title = note.split("\n")[0].replaceAll("#", "");
@@ -40,3 +40,7 @@ const Note = ({ note, id }: UserNotes) => {
 };
 
 export default Note;
+interface Props {
+  id: string;
+  note: string;
+}
