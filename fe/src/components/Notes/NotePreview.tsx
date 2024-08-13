@@ -2,11 +2,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useNotesContext } from "../../Context/NotesContext";
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from "../ui/button";
+import { useUIContext } from "@/Context/UIContext";
 
 const NotePreview = () => {
   const { id } = useParams();
 
-  const { userNotes, deleteNote, theme } = useNotesContext() as Context;
+  const { userNotes, deleteNote } = useNotesContext() as Context;
+
+  const { theme } = useUIContext() as UIContext;
 
   const navigate = useNavigate();
 

@@ -7,6 +7,7 @@ import Notes from "./components/Notes/Notes";
 import NotePreview from "./components/Notes/NotePreview";
 
 import { mainRoute } from "./helpers/loaders";
+import { UIProvider } from "./Context/UIContext";
 
 const router = createBrowserRouter([
   {
@@ -47,7 +48,9 @@ const router = createBrowserRouter([
 const AppWrapper = () => {
   return (
     <NotesProvider>
-      <RouterProvider router={router} />
+      <UIProvider>
+        <RouterProvider router={router} />
+      </UIProvider>
     </NotesProvider>
   );
 };

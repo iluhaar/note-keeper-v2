@@ -21,7 +21,6 @@ export const NotesProvider = ({ children }: Props) => {
   const [userNotes, setUserNotes] = useState<UserNotes[]>([]);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [theme, setTheme] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -138,16 +137,6 @@ export const NotesProvider = ({ children }: Props) => {
     }
   };
 
-  const toggleTheme = (status: boolean) => {
-    if (status) {
-      setTheme(true);
-      return document.documentElement.classList.add("dark");
-    }
-
-    setTheme(false);
-    return document.documentElement.classList.remove("dark");
-  };
-
   return (
     <NotesContext.Provider
       value={{
@@ -160,8 +149,6 @@ export const NotesProvider = ({ children }: Props) => {
         searchInNotes,
         deleteNote,
         editNote,
-        theme,
-        toggleTheme,
         registerUser,
         setIsLoggedIn,
         isLoading,

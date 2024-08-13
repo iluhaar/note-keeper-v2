@@ -1,12 +1,17 @@
-import { useNotesContext } from "@/Context/NotesContext";
 import { Switch } from "../ui/switch";
 
-const ThemeToggle = () => {
-  const { theme, toggleTheme } = useNotesContext() as Context;
+import { useUIContext } from "@/Context/UIContext";
+
+const ThemeToggle = ({ open }: { open: boolean }) => {
+  const { theme, toggleTheme } = useUIContext() as UIContext;
 
   return (
     <div>
-      <Switch checked={theme} onCheckedChange={(e) => toggleTheme(e)} />
+      <Switch
+        className={`${open ? "pl-3" : ""}`}
+        checked={theme}
+        onCheckedChange={(e) => toggleTheme(e)}
+      />
     </div>
   );
 };

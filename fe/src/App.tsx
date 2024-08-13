@@ -3,11 +3,14 @@ import "./App.css";
 import { useEffect } from "react";
 import { Login } from "./components/Login/Login";
 import MDEditor from "@uiw/react-md-editor";
+import { useUIContext } from "./Context/UIContext";
 
 function App() {
   const navigate = useNavigate();
 
-  const { isLoggedIn, theme } = useLoaderData() as Context;
+  const { isLoggedIn } = useLoaderData() as Context;
+
+  const { theme } = useUIContext() as UIContext;
 
   useEffect(() => {
     if (isLoggedIn) {

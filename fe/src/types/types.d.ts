@@ -34,8 +34,6 @@ interface Context {
   searchInNotes: (input: string) => UserNotes[];
   deleteNote: (id: string) => Promise;
   editNote: (id: string, value: string) => void;
-  theme: boolean;
-  toggleTheme: (arg: boolean) => void;
   registerUser: (
     arg1: string,
     arg2: string,
@@ -49,4 +47,17 @@ interface Context {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setIsLoggedIn: (arg: boolean) => void;
   isLoading: boolean;
+}
+
+interface UIContext {
+  showNavbar: boolean;
+  toggleNavbar: () => void;
+  theme: boolean;
+  toggleTheme: (arg: boolean) => void;
+}
+
+
+interface Icon {
+  img: "account" | "editor" | "notes" | "logout";
+  onClick?: () => void;
 }

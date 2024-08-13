@@ -4,11 +4,14 @@ import { useParams } from "react-router-dom";
 import { useNotesContext } from "../../Context/NotesContext";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { useUIContext } from "@/Context/UIContext";
 
 const Editor = ({ place }: Props) => {
   const { id } = useParams();
 
-  const { addNote, userNotes, editNote, theme } = useNotesContext() as Context;
+  const { addNote, userNotes, editNote } = useNotesContext() as Context;
+
+  const { theme } = useUIContext() as UIContext;
 
   const [value, setValue] = useState<string | undefined>("");
   const [tags] = useState([]);

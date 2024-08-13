@@ -75,6 +75,13 @@
   }
 }
 
+.w-md-editor ol {
+  list-style: decimal;
+}
+.w-md-editor ul {
+  list-style: disc;
+}
+
 @media (prefers-color-scheme: light) {
   .wmde-markdown,
   .wmde-markdown-var {

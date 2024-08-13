@@ -1,6 +1,8 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { useNotesContext } from "../../Context/NotesContext";
+import { useEffect } from "react";
 
+import { NavLink, useNavigate } from "react-router-dom";
+
+import { useNotesContext } from "../../Context/NotesContext";
 import { APP_NAME } from "@/constants";
 
 import Account from "../Account/Account";
@@ -10,12 +12,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { CommandMenu } from "../SearchBar/CommandSearch";
+import { cn } from "@/lib/utils";
+import Icon from "../Icon";
+import { useUIContext } from "@/Context/UIContext";
 
 const NavBar = () => {
   const { userNotes, isLoggedIn, logOut, userData } =
     useNotesContext() as Context;
 
+  const { showNavbar, toggleNavbar } = useUIContext() as UIContext;
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "b" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        toggleNavbar();
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
+  const width = showNavbar ? "sm:w-1/6" : "sm:w-[3%]";
 
   let appTitle = "";
 
@@ -53,20 +73,26 @@ const NavBar = () => {
   }
 
   return (
-    <Card className="text-left dark:bg-slate-800 dark:text-white ">
+    <Card
+      className={cn("text-left dark:bg-slate-800 dark:text-white", `${width}`)}
+    >
       <CardHeader>
         <CardTitle className="flex flex-row items-center justify-between">
-          <NavLink to="/">
-            <span className="py-2 font-bold">{appTitle}</span>
-          </NavLink>
-          <ThemeToggle />
+          {showNavbar && (
+            <NavLink to="/">
+              <span className="py-2 font-bold">{appTitle}</span>
+            </NavLink>
+          )}
+          <ThemeToggle open={showNavbar} />
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-row items-center justify-between gap-2 sm:block">
-        <div className="flex flex-row gap-2 sm:flex-col">
+        <div className="flex flex-row gap-2 sm:flex-col sm:gap-y-3">
           <CommandMenu />
           <Sheet>
-            <SheetTrigger className="text-left">Account</SheetTrigger>
+            <SheetTrigger className="text-left">
+              {showNavbar ? <span>Account</span> : <Icon img="account" />}
+            </SheetTrigger>
             <SheetContent>
               <Account />
             </SheetContent>
@@ -79,7 +105,7 @@ const NavBar = () => {
                     to={"/editor"}
                     className={({ isActive }) => (isActive ? "underline" : "")}
                   >
-                    Editor
+                    {showNavbar ? <span>Editor</span> : <Icon img="editor" />}
                   </NavLink>
                 </li>
                 <li>
@@ -87,21 +113,27 @@ const NavBar = () => {
                     to={"/notes"}
                     className={({ isActive }) => (isActive ? "underline" : "")}
                   >
-                    Notes
+                    <div className="flex flex-row sm:gap-2">
+                      {showNavbar ? <span>Notes</span> : <Icon img="notes" />}
+                    </div>
                   </NavLink>
-                  {content}
+                  {showNavbar && <>{content}</>}
                 </li>
               </>
             )}
           </ul>
         </div>
-        <div
-          role="button"
-          className="sm:pt-2 hover:font-bold pr-3"
-          onClick={handleLogout}
-        >
-          Logout
-        </div>
+        {showNavbar ? (
+          <div
+            role="button"
+            className="sm:pt-2 hover:font-bold pr-3"
+            onClick={handleLogout}
+          >
+            Logout
+          </div>
+        ) : (
+          <Icon img="logout" onClick={handleLogout} />
+        )}
       </CardContent>
     </Card>
   );
