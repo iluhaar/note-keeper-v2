@@ -1,13 +1,15 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import Layout from "./Layout";
-import Editor from "./components/Editor/Editor";
 import { NotesProvider } from "./Context/NotesContext";
+import { UIProvider } from "./Context/UIContext";
+
+import Editor from "./components/Editor/Editor";
 import Notes from "./components/Notes/Notes";
 import NotePreview from "./components/Notes/NotePreview";
+import UserTags from "./components/UserTags/UserTags";
 
 import { mainRoute } from "./helpers/loaders";
-import { UIProvider } from "./Context/UIContext";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,16 @@ const router = createBrowserRouter([
       {
         path: "/notes:id",
         element: <NotePreview />,
+      },
+    ],
+  },
+  {
+    path: "/tags",
+    element: <Layout />,
+    children: [
+      {
+        path: "",
+        element: <UserTags />,
       },
     ],
   },

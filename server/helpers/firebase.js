@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.loginUser = exports.deleteData = exports.updateData = exports.getData = void 0;
+exports.editUserTags = exports.createUser = exports.loginUser = exports.deleteData = exports.updateData = exports.getData = void 0;
 var app_1 = require("firebase/app");
 var database_1 = require("firebase/database");
 var constants_1 = require("../constants");
@@ -172,3 +172,27 @@ var deleteData = function (data, id) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.deleteData = deleteData;
+var editUserTags = function (userId, tags) { return __awaiter(void 0, void 0, void 0, function () {
+    var databaseRef, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                databaseRef = (0, database_1.ref)(database, "/users/".concat(userId));
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, (0, database_1.update)(databaseRef, {
+                        'tags': tags
+                    })];
+            case 2:
+                _a.sent();
+                return [2 /*return*/, { success: true, error: null, data: tags }];
+            case 3:
+                error_2 = _a.sent();
+                console.log(error_2);
+                return [2 /*return*/, { success: false, error: error_2, data: null }];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.editUserTags = editUserTags;

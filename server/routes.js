@@ -36,49 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mockedNotes = void 0;
 exports.getNotes = getNotes;
 exports.updateNotes = updateNotes;
 exports.deleteNote = deleteNote;
 exports.handleLogin = handleLogin;
 exports.registerUser = registerUser;
+exports.updateUsersTags = updateUsersTags;
 var firebase_1 = require("./helpers/firebase");
-exports.mockedNotes = {
-    notes: [
-        {
-            note: "# Shopping List\n## Items:\n- Milk\n- Bread\n- Eggs\n- Cheese",
-            id: "Shopping List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-        },
-        {
-            note: "# Meeting Notes\n## Topics:\n- Project Update\n- Task Assignments\n- Next Steps",
-            id: "Meeting Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-        },
-        {
-            note: "# Recipe\n## Ingredients:\n- Flour\n- Sugar\n- Butter\n## Instructions:\n1. Preheat oven\n2. Mix ingredients",
-            id: "Recipe-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-        },
-        {
-            note: "# Travel Itinerary\n## Days:\n- Day 1: Arrival\n- Day 2: Sightseeing\n- Day 3: Museum visit",
-            id: "Travel Itinerary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-        },
-        {
-            note: "# Book Summary\n## Chapters:\n- Introduction\n- Chapter 1\n- Chapter 2",
-            id: "Book Summary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-        },
-        {
-            note: "# Movie Review\n## Plot:\n- Brief summary\n## Characters:\n- Main characters\n## Review:\n- Overall opinion",
-            id: "Movie Review-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-        },
-        {
-            note: "# Study Notes\n## Topic:\n- Subject matter\n## Key Points:\n- Important information",
-            id: "Study Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-        },
-        {
-            note: "# Task List\n## Tasks:\n- Task 1\n- Task 2\n- Task 3",
-            id: "Task List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-        },
-    ],
-};
 function getNotes(fastify, _options) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
@@ -255,6 +219,48 @@ function registerUser(fastify, _options) {
                         case 3:
                             error_5 = _a.sent();
                             console.log("🚀 ~ fastify.post ~ error:", error_5);
+                            return [2 /*return*/, { success: false }];
+                        case 4: return [2 /*return*/];
+                    }
+                });
+            }); });
+            return [2 /*return*/];
+        });
+    });
+}
+function updateUsersTags(fastify, _options) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _this = this;
+        return __generator(this, function (_a) {
+            fastify.post("/user-tags", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+                var requestBody, userId, tags, data, error_6;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            reply.headers({
+                                "Access-Control-Allow-Origin": "*",
+                                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                                "Access-Control-Allow-Methods": "POST",
+                            });
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            requestBody = request.body;
+                            userId = requestBody.id, tags = requestBody.tags;
+                            return [4 /*yield*/, (0, firebase_1.editUserTags)(userId, tags)];
+                        case 2:
+                            data = _a.sent();
+                            if (data.success === false) {
+                                reply.code(409);
+                                return [2 /*return*/, reply.send(data)];
+                            }
+                            else {
+                                return [2 /*return*/, reply.code(200).send(data)];
+                            }
+                            return [3 /*break*/, 4];
+                        case 3:
+                            error_6 = _a.sent();
+                            console.log("🚀 ~ fastify.post ~ error:", error_6);
                             return [2 /*return*/, { success: false }];
                         case 4: return [2 /*return*/];
                     }

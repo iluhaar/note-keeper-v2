@@ -3,7 +3,12 @@ import { cn } from "@/lib/utils";
 
 const Tag = ({ label, color }: Props) => {
   return (
-    <Badge className={cn("px-2 cursor-pointer", `${color}`)}>
+    <Badge
+      className={cn("px-2")}
+      style={{
+        backgroundColor: `${color}`,
+      }}
+    >
       <p>{label}</p>
     </Badge>
   );

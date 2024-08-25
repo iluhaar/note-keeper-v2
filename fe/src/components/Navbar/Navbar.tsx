@@ -110,6 +110,14 @@ const NavBar = () => {
                 </li>
                 <li>
                   <NavLink
+                    to={"/tags"}
+                    className={({ isActive }) => (isActive ? "underline" : "")}
+                  >
+                    Tags
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
                     to={"/notes"}
                     className={({ isActive }) => (isActive ? "underline" : "")}
                   >

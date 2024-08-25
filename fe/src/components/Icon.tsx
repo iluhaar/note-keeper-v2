@@ -3,7 +3,7 @@ import { ICONS } from "@/constants";
 const Icon = ({ img, onClick }: Icon) => {
   return (
     <img
-      className="hidden sm:block sm:pt-2 cursor-pointer"
+      className="hidden sm:block sm:pt-2 cursor-pointer navbar-icon"
       src={ICONS[img]}
       title={img}
       alt={img}

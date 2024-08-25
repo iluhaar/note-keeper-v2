@@ -4,7 +4,6 @@ import { firebaseConfig } from "../constants";
 
 import { v4 as uuid } from "uuid";
 import { hashPassword, verifyPassword } from "./hashing";
-import { mockedNotes } from "../routes";
 
 const app = initializeApp(firebaseConfig);
 
@@ -109,7 +108,22 @@ const deleteData = async (data: Data, id: string) => {
   });
 };
 
-export { getData, updateData, deleteData, loginUser, createUser };
+const editUserTags = async (userId: string, tags: Tag[]) => {
+  const databaseRef = ref(database, `/users/${userId}`);
+  try {
+    await update(databaseRef, {
+      'tags': tags
+    })
+    return { success: true, error: null, data: tags };
+  } catch (error) {
+    console.log(error);
+    return { success: false, error, data: null };
+  }
+}
+
+
+
+export { getData, updateData, deleteData, loginUser, createUser, editUserTags };
 
 interface Users {
   email: string;
@@ -138,4 +152,10 @@ interface Data {
 interface Note {
   id: string;
   note: string;
+}
+
+interface Tag {
+  label: string;
+  color: string;
+  id: string
 }

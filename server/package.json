@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "listen": "tsc -w index.ts",
-    "start": " nodemon index.js"
+    "start": "nodemon index.js"
   },
   "type": "commonjs",
   "keywords": [],

@@ -68,6 +68,16 @@
     @apply bg-background text-foreground;
   }
 
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+
   @media only screen and (min-width: 768px) {
     body {
       margin: 0 8px 0 8px;
@@ -80,6 +90,12 @@
 }
 .w-md-editor ul {
   list-style: disc;
+}
+
+.navbar-icon {
+  width: 30px;
+  height: 30px;
+  max-width: unset;
 }
 
 @media (prefers-color-scheme: light) {
@@ -145,4 +161,8 @@
   .shadow-sm {
     box-shadow: var(--box-shadow) !important;
   }
+}
+
+.w-md-editor-toolbar ul {
+  display: flex;
 }
