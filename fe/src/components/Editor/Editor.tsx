@@ -1,10 +1,22 @@
-import MDEditor from "@uiw/react-md-editor";
+import MDEditor, { commands } from "@uiw/react-md-editor";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNotesContext } from "../../Context/NotesContext";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useUIContext } from "@/Context/UIContext";
+import { AddNoteTags } from "../NoteTags/AddTag";
+
+const Tags = {
+  name: "Tags",
+  keyCommand: "tags",
+  buttonProps: { "aria-label": "Tags" },
+  icon: (
+    <>
+      <AddNoteTags />
+    </>
+  ),
+};
 
 const Editor = ({ place }: Props) => {
   const { id } = useParams();
@@ -18,7 +30,11 @@ const Editor = ({ place }: Props) => {
 
   const handleSave = (value: string) => {
     if (id) {
-      editNote(id, value);
+      editNote(
+        id,
+        value,
+        userNotes.find((note: UserNotes) => note.id === id)?.tags ?? []
+      );
       return toast("Note has been edited");
     }
 
@@ -45,6 +61,7 @@ const Editor = ({ place }: Props) => {
         className="w-[90%] sm:w-full !h-[75vh] sm:!h-[90vh]"
         onChange={setValue}
         visibleDragbar={false}
+        commands={[...commands.getCommands(), commands.divider, Tags]}
       />
 
       {place !== "home" && (

@@ -43,4 +43,23 @@ const removeNote = async (notes: UserNotes[], id: string): Promise<void> => {
   }
 };
 
-export { getNotes, updateNotes, removeNote };
+const updateTag = async (tags: UserTags, id: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/user-tags`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ tags, id }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+export { getNotes, updateNotes, removeNote, updateTag };
