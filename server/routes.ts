@@ -3,47 +3,11 @@ import { FastifyInstance } from "fastify";
 import {
   createUser,
   deleteData,
+  editUserTags,
   getData,
   loginUser,
   updateData,
 } from "./helpers/firebase";
-
-export const mockedNotes = {
-  notes: [
-    {
-      note: "# Shopping List\n## Items:\n- Milk\n- Bread\n- Eggs\n- Cheese",
-      id: "Shopping List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-    },
-    {
-      note: "# Meeting Notes\n## Topics:\n- Project Update\n- Task Assignments\n- Next Steps",
-      id: "Meeting Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-    },
-    {
-      note: "# Recipe\n## Ingredients:\n- Flour\n- Sugar\n- Butter\n## Instructions:\n1. Preheat oven\n2. Mix ingredients",
-      id: "Recipe-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-    },
-    {
-      note: "# Travel Itinerary\n## Days:\n- Day 1: Arrival\n- Day 2: Sightseeing\n- Day 3: Museum visit",
-      id: "Travel Itinerary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-    },
-    {
-      note: "# Book Summary\n## Chapters:\n- Introduction\n- Chapter 1\n- Chapter 2",
-      id: "Book Summary-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-    },
-    {
-      note: "# Movie Review\n## Plot:\n- Brief summary\n## Characters:\n- Main characters\n## Review:\n- Overall opinion",
-      id: "Movie Review-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-    },
-    {
-      note: "# Study Notes\n## Topic:\n- Subject matter\n## Key Points:\n- Important information",
-      id: "Study Notes-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-    },
-    {
-      note: "# Task List\n## Tasks:\n- Task 1\n- Task 2\n- Task 3",
-      id: "Task List-641784f3-dc9b-4797-8a2f-b0922a225a75", // Replace with a unique ID generator
-    },
-  ],
-};
 
 export async function getNotes(fastify: FastifyInstance, _options: any) {
   fastify.get("/notes", async (request, reply) => {
@@ -159,6 +123,34 @@ export async function registerUser(fastify: FastifyInstance, _options: any) {
       return { success: false };
     }
   });
+}
+
+export async function updateUsersTags(fastify: FastifyInstance, _options: any) {
+  fastify.post("/user-tags", async (request, reply) => {
+    reply.headers({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers":
+        "Origin, X-Requested-With, Content-Type, Accept",
+      "Access-Control-Allow-Methods": "POST",
+    });
+
+    try {
+      const requestBody = request.body as any;
+      const { id: userId, tags } = requestBody;
+      const data: any = await editUserTags(userId, tags);
+
+      if (data.success === false) {
+        reply.code(409);
+        return reply.send(data);
+      } else {
+        return reply.code(200).send(data);
+      }
+    } catch (error) {
+      console.log("🚀 ~ fastify.post ~ error:", error);
+      return { success: false };
+    }
+
+  })
 }
 
 interface registerI {

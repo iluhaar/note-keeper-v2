@@ -10,6 +10,7 @@ import {
   handleLogin,
   registerUser,
   updateNotes,
+  updateUsersTags,
 } from "./routes.js";
 
 const fastify = Fastify({
@@ -24,6 +25,7 @@ fastify.register(updateNotes);
 fastify.register(deleteNote);
 fastify.register(handleLogin);
 fastify.register(registerUser);
+fastify.register(updateUsersTags);
 
 const SERVER_PORT = Number(process.env.PORT) || 3000;
 
