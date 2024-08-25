@@ -23,7 +23,10 @@ export const NotesProvider = ({ children }: Props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userTags, setUserTags] = useState<UserTags>({});
-
+  const [filter, setFilter] = useState({
+    value: "",
+    type: null,
+  });
   useEffect(() => {
     if (userData) {
       setIsLoading(true);
@@ -190,10 +193,22 @@ export const NotesProvider = ({ children }: Props) => {
       .catch((error) => console.error(error));
   };
 
+  const resolveNotesList = () => {
+    if (filter.value === "") return userNotes;
+
+    if (filter.type === "tag") {
+      return userNotes.filter((note) =>
+        note.tags.some((tag) => tag.label === filter.value)
+      );
+    }
+
+    return userNotes.filter((note) => note.note.includes(filter.value));
+  };
+
   return (
     <NotesContext.Provider
       value={{
-        userNotes,
+        userNotes: resolveNotesList(),
         addNote,
         isLoggedIn,
         logIn,
@@ -209,6 +224,7 @@ export const NotesProvider = ({ children }: Props) => {
         addTag,
         editTag,
         deleteTag,
+        setFilter,
       }}
     >
       {children}

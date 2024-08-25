@@ -17,7 +17,7 @@ interface UserData {
 }
 
 interface Context {
-  userNotes: UserNotes[] | [];
+  userNotes: UserNotes[] | [] | undefined;
   addNote: (note: string, tags: Tag[] | []) => void;
   isLoggedIn: boolean;
   logIn: (
@@ -52,6 +52,8 @@ interface Context {
   addTag: (arg1: string, arg2: string) => void;
   editTag: (arg: Tag) => void;
   deleteTag: (arg: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setFilter: ({ value: string, type: string }) => any;
 }
 
 interface UIContext {

@@ -17,7 +17,7 @@ import Icon from "../Icon";
 import { useUIContext } from "@/Context/UIContext";
 
 const NavBar = () => {
-  const { userNotes, isLoggedIn, logOut, userData } =
+  const { setFilter, isLoggedIn, logOut, userData } =
     useNotesContext() as Context;
 
   const { showNavbar, toggleNavbar } = useUIContext() as UIContext;
@@ -33,6 +33,7 @@ const NavBar = () => {
     };
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const width = showNavbar ? "sm:w-1/6" : "sm:w-[3%]";
@@ -49,28 +50,6 @@ const NavBar = () => {
     logOut();
     navigate("/");
   };
-
-  let content;
-  if (userNotes?.length > 0) {
-    content = (
-      <ol className="hidden sm:block sm:h-[100%] list-decimal mt-2 pl-4">
-        {userNotes?.map(({ note, id }: UserNotes) => {
-          const noteTitle = note
-            .split("\n")[0]
-            .replaceAll("#", "")
-            .replaceAll("*", "");
-
-          return (
-            <li key={id}>
-              <NavLink to={`/editor/${id}`} className="underline">
-                {noteTitle}
-              </NavLink>
-            </li>
-          );
-        })}
-      </ol>
-    );
-  }
 
   return (
     <Card
@@ -104,6 +83,7 @@ const NavBar = () => {
                   <NavLink
                     to={"/editor"}
                     className={({ isActive }) => (isActive ? "underline" : "")}
+                    onClick={() => setFilter({ value: "", type: null })}
                   >
                     {showNavbar ? <span>Editor</span> : <Icon img="editor" />}
                   </NavLink>
@@ -120,12 +100,12 @@ const NavBar = () => {
                   <NavLink
                     to={"/notes"}
                     className={({ isActive }) => (isActive ? "underline" : "")}
+                    onClick={() => setFilter({ value: "", type: null })}
                   >
                     <div className="flex flex-row sm:gap-2">
                       {showNavbar ? <span>Notes</span> : <Icon img="notes" />}
                     </div>
                   </NavLink>
-                  {showNavbar && <>{content}</>}
                 </li>
               </>
             )}
