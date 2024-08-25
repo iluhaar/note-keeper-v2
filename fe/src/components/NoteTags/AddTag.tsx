@@ -27,7 +27,7 @@ export function AddNoteTags() {
   const { id } = useParams();
 
   const { userTags, userNotes, editNote } = useNotesContext() as Context;
-  const findNote = userNotes?.find((note: UserNotes) => note.id === id);
+  const findNote = userNotes.find((note: UserNotes) => note.id === id);
 
   const [open, setOpen] = useState(false);
   const [tags, setTags] = useState<
