@@ -66,26 +66,36 @@ export function CommandMenu() {
 
           {userNotes && userNotes.length > 0 && (
             <CommandGroup heading="Notes">
-              {userNotes.map((note: UserNotes) => (
-                <Link
-                  key={note.id}
-                  to={`/notes/${note.id}`}
-                  onClick={() => setOpen(false)}
-                >
-                  <CommandItem className="cursor-pointer">
-                    {note.note.split("\n")[0].replaceAll("#", "")}
-                  </CommandItem>
-                </Link>
-              ))}
+              {userNotes.map((userNote: UserNotes) => {
+                return (
+                  <Link
+                    key={userNote.id}
+                    to={`/notes/${userNote.id}`}
+                    onClick={() => setOpen(false)}
+                  >
+                    <CommandItem
+                      className="cursor-pointer"
+                      value={userNote.note.split("\n")[0].replaceAll("#", "")}
+                      selected={false}
+                    >
+                      {userNote.note.split("\n")[0].replaceAll("#", "")}
+                    </CommandItem>
+                  </Link>
+                );
+              })}
             </CommandGroup>
           )}
           <CommandGroup heading="Suggestions">
             <Link to={"/editor"} onClick={() => setOpen(false)}>
-              <CommandItem className="cursor-pointer">Editor</CommandItem>
+              <CommandItem className="cursor-pointer" value="Editor">
+                Editor
+              </CommandItem>
             </Link>
 
             <Link to={"/notes"} onClick={() => setOpen(false)}>
-              <CommandItem className="cursor-pointer">Notes</CommandItem>
+              <CommandItem className="cursor-pointer" value="Notes">
+                Notes
+              </CommandItem>
             </Link>
           </CommandGroup>
         </CommandList>
