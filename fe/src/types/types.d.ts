@@ -65,7 +65,7 @@ interface UIContext {
 
 
 interface Icon {
-  img: "account" | "editor" | "notes" | "logout";
+  img: "account" | "editor" | "notes" | "logout" | "tags";
   onClick?: () => void;
 }
 

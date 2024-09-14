@@ -32,7 +32,7 @@ export function AddNoteTags() {
   const [open, setOpen] = useState(false);
   const [tags, setTags] = useState<
     { label: string; color: string; id: string; selected?: boolean }[]
-  >(Object.values(userTags));
+  >(Object.values(userTags ?? {}));
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
