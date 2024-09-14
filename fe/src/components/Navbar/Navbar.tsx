@@ -93,7 +93,7 @@ const NavBar = () => {
                     to={"/tags"}
                     className={({ isActive }) => (isActive ? "underline" : "")}
                   >
-                    Tags
+                    {showNavbar ? <span> Tags</span> : <Icon img="tags" />}
                   </NavLink>
                 </li>
                 <li>
