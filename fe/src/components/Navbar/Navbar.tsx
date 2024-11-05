@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import Icon from "../Icon";
 import { useUIContext } from "@/Context/UIContext";
 
-const NavBar = () => {
+const Navbar = () => {
   const { setFilter, isLoggedIn, logOut, userData } =
     useNotesContext() as Context;
 
@@ -127,4 +127,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default Navbar;

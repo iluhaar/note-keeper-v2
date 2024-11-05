@@ -2,8 +2,9 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useNotesContext } from "../../Context/NotesContext";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { DialogDescription, DialogTitle } from "../ui/dialog";
+import { memo } from "react";
 
-const Account = () => {
+const Account = memo(() => {
   const { userData } = useNotesContext() as Context;
 
   if (
@@ -26,6 +27,6 @@ const Account = () => {
       </CardContent>
     </Card>
   );
-};
+});
 
 export default Account;

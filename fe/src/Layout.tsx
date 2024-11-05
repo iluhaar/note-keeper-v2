@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
 import { Toaster } from "./components/ui/sonner";
-import NavBar from "./components/Navbar/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import { useNotesContext } from "./Context/NotesContext";
 import Loading from "./components/Indicators/Loading";
 
@@ -18,7 +18,7 @@ const Layout = () => {
 
   return (
     <div className="w-full flex gap-x-10 flex-col sm:flex-row sm:pt-4 sm:h-[100dvh] sm:pb-2">
-      <NavBar />
+      <Navbar />
       <div className="flex w-full items-left justify-left sm:items-start sm:justify-start">
         <Outlet />
         <Toaster position="top-right" />

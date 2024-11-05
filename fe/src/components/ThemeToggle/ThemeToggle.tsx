@@ -1,8 +1,9 @@
+import { memo } from "react";
 import { Switch } from "../ui/switch";
 
 import { useUIContext } from "@/Context/UIContext";
 
-const ThemeToggle = ({ open }: { open: boolean }) => {
+const ThemeToggle = memo(({ open }: { open: boolean }) => {
   const { theme, toggleTheme } = useUIContext() as UIContext;
 
   return (
@@ -14,6 +15,6 @@ const ThemeToggle = ({ open }: { open: boolean }) => {
       />
     </div>
   );
-};
+});
 
 export default ThemeToggle;
