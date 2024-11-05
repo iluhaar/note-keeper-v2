@@ -1,4 +1,6 @@
 import { useNotesContext } from "../../Context/NotesContext";
+import AddFolder from "../Folders/AddFolder";
+import Folders from "../Folders/Folders";
 import Note from "./Note";
 
 const Notes = () => {
@@ -17,11 +19,15 @@ const Notes = () => {
   });
 
   return (
-    <>
-      <div className="flex flex-row gap-2 mt-2 pl-5 flex-wrap pb-4 items-left content-left sm:content-start sm:items-stretch sm:pl-0">
-        {content}
+    <div className="flex flex-row justify-between items-start mt-2 pl-5 pr-5">
+      <div className="flex flex-col">
+        <Folders />
+        <div className="flex gap-2 flex-wrap pb-4 items-left content-left sm:content-start sm:items-stretch sm:pl-0">
+          <>{content}</>
+        </div>
       </div>
-    </>
+      <AddFolder />
+    </div>
   );
 };
 

@@ -78,3 +78,19 @@ interface Tag {
   id: string;
   selected?: boolean
 }
+
+type Folder = {
+  id: string;
+  name: string;
+  notes: UserNotes[];
+};
+
+type NewFolder = {
+  key: string, value: string
+}
+
+type PerformNewFolderReturnType = {
+  id: string;
+  name: string;
+  notes: NewFolder[]
+} 
