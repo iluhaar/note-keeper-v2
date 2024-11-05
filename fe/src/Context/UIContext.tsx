@@ -1,4 +1,10 @@
-import { createContext, ReactElement, useContext, useState } from "react";
+import {
+  createContext,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export const UIContext = createContext<UIContext | null>(null);
 
@@ -9,17 +15,28 @@ export const UIProvider = ({ children }: Props) => {
   const [showNavbar, setShowNavbar] = useState(true);
   const [theme, setTheme] = useState(false);
 
+  useEffect(() => {
+    const isDarkTheme = JSON.parse(
+      localStorage.getItem("dark-theme") ?? "false"
+    );
+
+    toggleTheme(isDarkTheme);
+  }, []);
+
   const toggleNavbar = () => {
     setShowNavbar((prev) => !prev);
   };
 
   const toggleTheme = (status: boolean) => {
     if (status) {
-      setTheme(true);
+      setTheme(status);
+
+      localStorage.setItem("dark-theme", "true");
       return document.documentElement.classList.add("dark");
     }
 
-    setTheme(false);
+    setTheme(status);
+    localStorage.setItem("dark-theme", "false");
     return document.documentElement.classList.remove("dark");
   };
 

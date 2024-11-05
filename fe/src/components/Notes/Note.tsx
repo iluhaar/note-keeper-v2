@@ -32,7 +32,7 @@ const Note = ({ note, id, tags }: Props) => {
     <Card className="flex-1 text-left sm:p-5 dark:bg-slate-800 shadow-sm h-80  w-[12rem] max-w-[180px] min-h-[175px] p-2 sm:min-w-[15rem] sm:max-w-[174px]">
       <CardTitle className="flex flex-col items-left pl-1">
         {tagsContent}
-        <div className="flex flex-row justify-between items-center pl-1 pt-1">
+        <div className="flex flex-row justify-between pl-1 pt-1">
           <Link to={`${id}`}>{title}</Link>
           <span
             title="delete"
@@ -44,8 +44,8 @@ const Note = ({ note, id, tags }: Props) => {
           </span>
         </div>
       </CardTitle>
-      <CardContent className="pt-10 w-[150px] h-[200px]">
-        <p className="max-h-[150px] text-ellipsis overflow-hidden sm:w-[150px] sm:h-[200px] sm:max-h-[175px] ">
+      <CardContent className="pt-10 w-[150px]">
+        <p className="max-h-[200px] text-ellipsis overflow-hidden sm:w-[150px] sm:max-h-[250px] ">
           {content}
         </p>
       </CardContent>

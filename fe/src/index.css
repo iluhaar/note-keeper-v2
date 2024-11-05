@@ -166,3 +166,14 @@
 .w-md-editor-toolbar ul {
   display: flex;
 }
+
+.wmde-markdown {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+  }
+}

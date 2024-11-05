@@ -75,5 +75,6 @@ interface UserTags {
 interface Tag {
   label: string;
   color: string;
-  id: string
+  id: string;
+  selected?: boolean
 }

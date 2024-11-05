@@ -29,14 +29,14 @@ export function AddNoteTags() {
   const { userTags, userNotes, editNote } = useNotesContext() as Context;
   const findNote = userNotes.find((note: UserNotes) => note.id === id);
 
+  const userTagsArray = Object.values(userTags) as Tag[];
+
   const [open, setOpen] = useState(false);
-  const [tags, setTags] = useState<
-    { label: string; color: string; id: string; selected?: boolean }[]
-  >(Object.values(userTags ?? {}));
+  const [tags, setTags] = useState<Tag[]>(userTagsArray);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const activeTags = Object.values(userTags).map((tag: any) => {
+    const activeTags = userTagsArray.map((tag) => {
       const isExists = findNote?.tags?.find((t) => t.id === tag.id);
       if (isExists) {
         return {
@@ -83,6 +83,17 @@ export function AddNoteTags() {
     });
   };
 
+  const content = tags.map(({ id, label, selected }) => (
+    <CommandItem
+      key={id}
+      value={label}
+      onSelect={(value: string) => handleSelect(value)}
+      selected={selected}
+    >
+      {label}
+    </CommandItem>
+  ));
+
   return (
     <div className="flex w-full flex-col items-start justify-between p-0 h-fit sm:flex-row sm:items-center">
       <DropdownMenu open={open} onOpenChange={handleOpenChange}>
@@ -103,18 +114,7 @@ export function AddNoteTags() {
                 />
                 <CommandList>
                   <CommandEmpty>No tag found.</CommandEmpty>
-                  <CommandGroup>
-                    {tags.map(({ id, label, selected }) => (
-                      <CommandItem
-                        key={id}
-                        value={label}
-                        onSelect={(value: string) => handleSelect(value)}
-                        selected={selected}
-                      >
-                        {label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                  <CommandGroup>{content}</CommandGroup>
                 </CommandList>
               </Command>
             </DropdownMenuSubContent>
