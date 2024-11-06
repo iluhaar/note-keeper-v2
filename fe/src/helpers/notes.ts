@@ -61,5 +61,17 @@ const updateTag = async (tags: UserTags, id: string) => {
   }
 }
 
+const updateFolders = async (folders: Folder[]) => {
+  try {
+    localStorage.setItem("users-folders", JSON.stringify(folders))
 
-export { getNotes, updateNotes, removeNote, updateTag };
+    return folders
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+const getUserFolders = async () => JSON.parse(localStorage.getItem("users-folders") ?? "")
+
+export { getNotes, updateNotes, removeNote, updateTag, getUserFolders, updateFolders };
