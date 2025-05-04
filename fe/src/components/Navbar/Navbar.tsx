@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useNotesContext } from "../../Context/NotesContext";
-import { APP_NAME } from "@/constants";
+import { APP_NAME, NAV_ITEMS } from "@/constants";
 
 import Account from "../Account/Account";
 
@@ -15,13 +15,11 @@ import { CommandMenu } from "../SearchBar/CommandSearch";
 import { cn } from "@/lib/utils";
 import Icon from "../Icon";
 import { useUIContext } from "@/Context/UIContext";
+import { NavbarItem } from "./NavbarItem";
 
 const Navbar = () => {
-  const { setFilter, isLoggedIn, logOut, userData } =
-    useNotesContext() as Context;
-
+  const { isLoggedIn, logOut, userData } = useNotesContext() as Context;
   const { showNavbar, toggleNavbar } = useUIContext() as UIContext;
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +34,7 @@ const Navbar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const width = showNavbar ? "sm:w-1/6" : "sm:w-[3%]";
+  const width = showNavbar ? "sm:w-1/6" : "sm:w-[5%]";
 
   let appTitle = "";
 
@@ -76,37 +74,18 @@ const Navbar = () => {
               <Account />
             </SheetContent>
           </Sheet>
-          <ul className="flex flex-row gap-2 items-center sm:block">
+          <ul className="flex flex-row gap-5 items-center sm:block">
             {isLoggedIn && (
               <>
-                <li>
-                  <NavLink
-                    to={"/editor"}
-                    className={({ isActive }) => (isActive ? "underline" : "")}
-                    onClick={() => setFilter({ value: "", type: null })}
-                  >
-                    {showNavbar ? <span>Editor</span> : <Icon img="editor" />}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={"/tags"}
-                    className={({ isActive }) => (isActive ? "underline" : "")}
-                  >
-                    {showNavbar ? <span> Tags</span> : <Icon img="tags" />}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={"/notes"}
-                    className={({ isActive }) => (isActive ? "underline" : "")}
-                    onClick={() => setFilter({ value: "", type: null })}
-                  >
-                    <div className="flex flex-row sm:gap-2">
-                      {showNavbar ? <span>Notes</span> : <Icon img="notes" />}
-                    </div>
-                  </NavLink>
-                </li>
+                {NAV_ITEMS.map((item) => (
+                  <NavbarItem
+                    key={item.path}
+                    path={item.path}
+                    label={item.label}
+                    icon={item.icon}
+                    shouldResetFilter={item.shouldResetFilter}
+                  />
+                ))}
               </>
             )}
           </ul>
@@ -120,7 +99,9 @@ const Navbar = () => {
             Logout
           </div>
         ) : (
-          <Icon img="logout" onClick={handleLogout} />
+          <div className="sm:pt-2">
+            <Icon img="logout" onClick={handleLogout} />
+          </div>
         )}
       </CardContent>
     </Card>
