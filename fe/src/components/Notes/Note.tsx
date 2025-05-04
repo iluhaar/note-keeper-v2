@@ -8,13 +8,6 @@ const Note = ({ note, id, tags }: Props) => {
   const { userTags, deleteNote } = useNotesContext() as Context;
 
   const title = note.split("\n")[0].replaceAll("#", "");
-  const content = note
-    .split("\n")
-    .filter((n) => n !== "")
-    .filter((n) => n !== " ")
-    .slice(1)
-    .join("\n")
-    .replaceAll("#", "");
 
   const tagsContent = (
     <div className="flex flex-row flex-wrap pt-1 gap-1">
@@ -29,11 +22,12 @@ const Note = ({ note, id, tags }: Props) => {
   );
 
   return (
-    <Card className="flex-1 text-left sm:p-5 dark:bg-slate-800 shadow-sm h-80  w-[12rem] max-w-[180px] min-h-[175px] p-2 sm:min-w-[15rem] sm:max-w-[174px]">
+    <Card className="flex-1 text-left sm:p-5 dark:bg-slate-800 shadow-sm h-80  w-[12rem] min-h-[5rem] p-2 sm:min-w-[18rem] sm:max-w-[12rem]">
       <CardTitle className="flex flex-col items-left pl-1">
-        {tagsContent}
         <div className="flex flex-row justify-between pl-1 pt-1">
-          <Link to={`${id}`}>{title}</Link>
+          <Link className="pr-2 sm:pr-0 text-xl sm:text-2xl" to={`${id}`}>
+            {title}
+          </Link>
           <span
             title="delete"
             className="cursor-pointer text-slate-400 hover:text-slate-500 dark:hover:text-slate-400"
@@ -44,11 +38,7 @@ const Note = ({ note, id, tags }: Props) => {
           </span>
         </div>
       </CardTitle>
-      <CardContent className="pt-10 w-[150px]">
-        <p className="max-h-[200px] text-ellipsis overflow-hidden sm:w-[150px] sm:max-h-[250px] ">
-          {content}
-        </p>
-      </CardContent>
+      <CardContent className="p-1 pt-5">Tags:{tagsContent}</CardContent>
     </Card>
   );
 };

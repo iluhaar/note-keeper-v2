@@ -1,16 +1,24 @@
-import { ICONS } from "@/constants";
+import { cn } from "@/lib/utils";
+import { ICONS } from "@/constants/icons";
 
-const Icon = ({ img, onClick }: Icon) => {
+type IconProps = {
+  img: keyof typeof ICONS;
+  onClick?: () => void;
+};
+
+const Icon = ({ img, onClick }: IconProps) => {
   return (
-    <img
-      className="hidden sm:block sm:pt-2 cursor-pointer navbar-icon"
-      src={ICONS[img]}
+    <div
+      className={cn(
+        "hidden sm:block sm:pt-2 cursor-pointer",
+        "text-foreground hover:text-primary transition-colors",
+        "dark:text-slate-400 dark:hover:text-slate-200"
+      )}
       title={img}
-      alt={img}
-      width="25px"
-      height="25px"
       onClick={onClick}
-    />
+    >
+      {ICONS[img]}
+    </div>
   );
 };
 

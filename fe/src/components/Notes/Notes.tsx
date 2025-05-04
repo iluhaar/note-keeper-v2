@@ -18,7 +18,7 @@ const Notes = () => {
 
   return (
     <>
-      <div className="flex flex-row gap-2 mt-2 pl-5 flex-wrap pb-4 items-left content-left sm:content-start sm:items-stretch sm:pl-0">
+      <div className="flex flex-row gap-2 pl-5 flex-wrap pb-4 items-left content-left sm:content-start sm:items-stretch sm:pl-0 mt-2 sm:mt-0">
         {content}
       </div>
     </>
