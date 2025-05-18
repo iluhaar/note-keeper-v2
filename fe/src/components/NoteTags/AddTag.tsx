@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 import { useNotesContext } from "@/Context/NotesContext";
+import { useAuthContext } from "@/Context/AuthContext";
 import {
   Command,
   CommandEmpty,
@@ -26,7 +27,8 @@ let isChanged = false;
 export function AddNoteTags() {
   const { id } = useParams();
 
-  const { userTags, userNotes, editNote } = useNotesContext() as Context;
+  const { userNotes, editNote } = useNotesContext() as Context;
+  const { userTags } = useAuthContext();
   const findNote = userNotes.find((note: UserNotes) => note.id === id);
 
   const userTagsArray = Object.values(userTags) as Tag[];

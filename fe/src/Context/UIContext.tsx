@@ -6,14 +6,15 @@ import {
   useState,
 } from "react";
 
-export const UIContext = createContext<UIContext | null>(null);
+export const UIContext = createContext<UIContextType | null>(null);
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useUIContext = () => useContext(UIContext) as UIContext;
+export const useUIContext = () => useContext(UIContext) as UIContextType;
 
 export const UIProvider = ({ children }: Props) => {
   const [showNavbar, setShowNavbar] = useState(true);
   const [theme, setTheme] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const isDarkTheme = JSON.parse(
@@ -42,7 +43,14 @@ export const UIProvider = ({ children }: Props) => {
 
   return (
     <UIContext.Provider
-      value={{ showNavbar, toggleNavbar, theme, toggleTheme }}
+      value={{
+        showNavbar,
+        toggleNavbar,
+        theme,
+        toggleTheme,
+        isLoading,
+        setIsLoading,
+      }}
     >
       {children}
     </UIContext.Provider>
@@ -51,4 +59,13 @@ export const UIProvider = ({ children }: Props) => {
 
 interface Props {
   children: ReactElement;
+}
+
+interface UIContextType {
+  showNavbar: boolean;
+  toggleNavbar: () => void;
+  theme: boolean;
+  toggleTheme: (arg: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (val: boolean) => void;
 }

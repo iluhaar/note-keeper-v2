@@ -25,14 +25,12 @@ interface Context {
     password: string
   ) => Promise<{
     success: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    error: null | any;
+    error: null | string;
     data: UserData;
   }>;
   logOut: () => void;
-  userData: UserData | undefined | null;
   searchInNotes: (input: string) => UserNotes[];
-  deleteNote: (id: string) => Promise;
+  deleteNote: (id: string) => Promise<void>;
   editNote: (id: string, value: string, tags: Tag[]) => void;
   registerUser: (
     arg1: string,
@@ -40,20 +38,13 @@ interface Context {
     arg3: string
   ) => Promise<{
     success: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    error: null | any;
+    error: null | string;
     data: UserData;
   }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setIsLoggedIn: (arg: boolean) => void;
-  isLoading: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  userTags: any;
   addTag: (arg1: string, arg2: string) => void;
   editTag: (arg: Tag) => void;
   deleteTag: (arg: string) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setFilter: ({ value: string, type: string }) => any;
+  setFilter: ({ value, type }: { value: string; type: string | null }) => void;
 }
 
 interface UIContext {
@@ -62,7 +53,6 @@ interface UIContext {
   theme: boolean;
   toggleTheme: (arg: boolean) => void;
 }
-
 
 interface Icon {
   img: "account" | "editor" | "notes" | "logout" | "tags";
@@ -76,5 +66,5 @@ interface Tag {
   label: string;
   color: string;
   id: string;
-  selected?: boolean
+  selected?: boolean;
 }

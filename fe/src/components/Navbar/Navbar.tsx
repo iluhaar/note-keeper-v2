@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useNotesContext } from "../../Context/NotesContext";
+import { useAuthContext } from "../../Context/AuthContext";
 import { APP_NAME, NAV_ITEMS } from "@/constants";
 
 import Account from "../Account/Account";
@@ -18,7 +19,8 @@ import { useUIContext } from "@/Context/UIContext";
 import { NavbarItem } from "./NavbarItem";
 
 const Navbar = () => {
-  const { isLoggedIn, logOut, userData } = useNotesContext() as Context;
+  const { isLoggedIn, logOut } = useNotesContext() as Context;
+  const { userData } = useAuthContext();
   const { showNavbar, toggleNavbar } = useUIContext() as UIContext;
   const navigate = useNavigate();
 

@@ -2,11 +2,11 @@ import { Outlet } from "react-router-dom";
 
 import { Toaster } from "./components/ui/sonner";
 import Navbar from "./components/Navbar/Navbar";
-import { useNotesContext } from "./Context/NotesContext";
+import { useUIContext } from "./Context/UIContext";
 import Loading from "./components/Indicators/Loading";
 
 const Layout = () => {
-  const { isLoading } = useNotesContext() as Context;
+  const { isLoading } = useUIContext();
 
   if (isLoading) {
     return (

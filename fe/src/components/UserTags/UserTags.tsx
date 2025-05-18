@@ -1,10 +1,10 @@
-import { useNotesContext } from "@/Context/NotesContext";
+import { useAuthContext } from "@/Context/AuthContext";
 
 import AddTag from "./AddTag";
 import { UserTagItem } from "./UserTagItem";
 
 const UserTags = () => {
-  const { userTags } = useNotesContext() as Context;
+  const { userTags } = useAuthContext();
 
   if (!userTags) return null;
 
