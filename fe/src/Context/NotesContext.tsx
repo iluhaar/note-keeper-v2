@@ -11,6 +11,8 @@ import { v4 as uuid } from "uuid";
 import { updateNotes, getNotes, removeNote, updateTag } from "../helpers/notes";
 
 import { registerUser as createUser, loginUser } from "../helpers/auth";
+import { useAuthContext } from "./AuthContext";
+import { useUIContext } from "./UIContext";
 
 export const NotesContext = createContext<Context | null>(null);
 
@@ -20,13 +22,15 @@ export const useNotesContext = () => useContext(NotesContext) as Context;
 export const NotesProvider = ({ children }: Props) => {
   const [userNotes, setUserNotes] = useState<UserNotes[]>([]);
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [userTags, setUserTags] = useState<UserTags>({});
-  const [filter, setFilter] = useState({
+  const [filter, setFilter] = useState<{ value: string; type: string | null }>({
     value: "",
     type: null,
   });
+
+  const { isLoggedIn, setIsLoggedIn } = useAuthContext();
+  const { setIsLoading } = useUIContext();
+
   useEffect(() => {
     if (userData) {
       setIsLoading(true);
@@ -49,7 +53,7 @@ export const NotesProvider = ({ children }: Props) => {
         document.title = `${parsedUser.name} ${document.title}`;
       }
     }
-  }, []);
+  }, [setIsLoggedIn]);
 
   const logOut = () => {
     setIsLoggedIn(false);
@@ -58,8 +62,10 @@ export const NotesProvider = ({ children }: Props) => {
 
   const logIn = async (email: string, password: string) => {
     const data = await loginUser(email, password);
-    setUserData(data.data);
-    setUserTags(data.data.tags);
+    if (data.success && data.data) {
+      setUserData(data.data);
+      setUserTags(data.data.tags);
+    }
     return data;
   };
 
@@ -213,14 +219,10 @@ export const NotesProvider = ({ children }: Props) => {
         isLoggedIn,
         logIn,
         logOut,
-        userData,
         searchInNotes,
         deleteNote,
         editNote,
         registerUser,
-        setIsLoggedIn,
-        isLoading,
-        userTags,
         addTag,
         editTag,
         deleteTag,

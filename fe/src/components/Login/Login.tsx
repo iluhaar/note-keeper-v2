@@ -4,17 +4,20 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
 import { useNotesContext } from "@/Context/NotesContext";
 import AuthForm from "./Form";
+import { useAuthContext } from "@/Context/AuthContext";
 
 export function Login() {
   const [progress, setProgress] = useState(0);
   const [isLogin, setIsLogin] = useState<boolean>(true);
-  const [error, setIsError] = useState(null);
+  const [error, setIsError] = useState<string | null>(null);
 
-  const { logIn, registerUser, setIsLoggedIn } = useNotesContext() as Context;
+  const { logIn, registerUser } = useNotesContext() as Context;
+  const { setIsLoggedIn } = useAuthContext();
 
   const navigate = useNavigate();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsError(null); // Clear any previous errors
 
     const form = e.target as HTMLFormElement;
 
@@ -34,7 +37,15 @@ export function Login() {
 
       setTimeout(() => setProgress(0), 300);
 
-      return setIsError(data.error);
+      // Clear password field on error
+      form.password.value = "";
+
+      // Handle specific error cases
+      if (data.error === "Password is incorrect") {
+        setIsError("The password you entered is incorrect. Please try again.");
+      } else {
+        setIsError(data.error);
+      }
     } else {
       setTimeout(() => setProgress(25), 300);
       const data = await registerUser(
@@ -54,7 +65,9 @@ export function Login() {
 
       setTimeout(() => setProgress(0), 300);
 
-      return setIsError(data.error);
+      // Clear password field on error
+      form.password.value = "";
+      setIsError(data.error);
     }
   };
 

@@ -1,11 +1,11 @@
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { useNotesContext } from "../../Context/NotesContext";
+import { useAuthContext } from "../../Context/AuthContext";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { DialogDescription, DialogTitle } from "../ui/dialog";
 import { memo } from "react";
 
 const Account = memo(() => {
-  const { userData } = useNotesContext() as Context;
+  const { userData } = useAuthContext();
 
   if (
     userData === undefined ||

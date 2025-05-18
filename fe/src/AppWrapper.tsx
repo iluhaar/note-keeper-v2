@@ -10,6 +10,7 @@ import NotePreview from "./components/Notes/NotePreview";
 import UserTags from "./components/UserTags/UserTags";
 
 import { mainRoute } from "./helpers/loaders";
+import { AuthProvider } from "./Context/AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -59,11 +60,13 @@ const router = createBrowserRouter([
 
 const AppWrapper = () => {
   return (
-    <NotesProvider>
+    <AuthProvider>
       <UIProvider>
-        <RouterProvider router={router} />
+        <NotesProvider>
+          <RouterProvider router={router} />
+        </NotesProvider>
       </UIProvider>
-    </NotesProvider>
+    </AuthProvider>
   );
 };
 

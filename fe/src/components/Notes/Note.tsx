@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { useAuthContext } from "@/Context/AuthContext";
 import { useNotesContext } from "@/Context/NotesContext";
 import Tag from "../Tag/Tag";
 
 const Note = ({ note, id, tags }: Props) => {
-  const { userTags, deleteNote } = useNotesContext() as Context;
+  const { userTags } = useAuthContext();
+  const { deleteNote } = useNotesContext() as Context;
 
   const title = note.split("\n")[0].replaceAll("#", "");
 
