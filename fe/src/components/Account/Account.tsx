@@ -1,11 +1,11 @@
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { useAuthContext } from "../../Context/AuthContext";
+import { useConvexContext } from "../../Context/ConvexContext";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { DialogDescription, DialogTitle } from "../ui/dialog";
 import { memo } from "react";
 
 const Account = memo(() => {
-  const { userData } = useAuthContext();
+  const { userData } = useConvexContext();
 
   if (
     userData === undefined ||

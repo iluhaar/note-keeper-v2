@@ -8,7 +8,9 @@ import { useUIContext } from "./Context/UIContext";
 function App() {
   const navigate = useNavigate();
 
-  const { isLoggedIn } = useLoaderData() as Context;
+  const { isLoggedIn } = useLoaderData() as { isLoggedIn: boolean };
+
+  console.log(isLoggedIn);
 
   const { theme } = useUIContext() as UIContext;
 

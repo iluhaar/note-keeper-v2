@@ -10,8 +10,9 @@ import {
   CommandList,
 } from "../ui/command";
 
-import { useNotesContext } from "@/Context/NotesContext";
+import { useConvexContext } from "@/Context/ConvexContext";
 import { useUIContext } from "@/Context/UIContext";
+import { UserNotes, UIContext } from "@/types/types";
 
 const SearchIcon = () => (
   <svg
@@ -37,7 +38,7 @@ const SearchIcon = () => (
 );
 
 export function CommandMenu() {
-  const { userNotes } = useNotesContext() as Context;
+  const { userNotes } = useConvexContext();
   const { showNavbar } = useUIContext() as UIContext;
 
   const [open, setOpen] = useState(false);
@@ -81,8 +82,8 @@ export function CommandMenu() {
               {userNotes.map((userNote: UserNotes) => {
                 return (
                   <Link
-                    key={userNote.id}
-                    to={`/notes/${userNote.id}`}
+                    key={userNote._id}
+                    to={`/notes/${userNote._id}`}
                     onClick={() => setOpen(false)}
                   >
                     <CommandItem

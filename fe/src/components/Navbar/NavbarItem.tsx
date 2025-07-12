@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { useNotesContext } from "../../Context/NotesContext";
+import { useConvexContext } from "../../Context/ConvexContext";
 import Icon from "../Icon";
 import { useUIContext } from "@/Context/UIContext";
 import { NavItem } from "@/types/shared";
+import { UIContext } from "@/types/types";
 
 export const NavbarItem = ({
   path,
@@ -10,7 +11,7 @@ export const NavbarItem = ({
   icon,
   shouldResetFilter,
 }: NavItem) => {
-  const { setFilter } = useNotesContext() as Context;
+  const { setFilter } = useConvexContext();
   const { showNavbar } = useUIContext() as UIContext;
 
   const handleClick = () => {

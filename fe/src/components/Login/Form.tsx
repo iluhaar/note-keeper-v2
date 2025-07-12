@@ -17,19 +17,32 @@ const AuthForm = ({
   progress,
   buttonText,
   isLogin,
+  isResetPassword,
   title,
   description,
   handleFormType,
+  handleResetPassword,
+  handleBackToLogin,
   footerText,
   error,
 }: Props) => {
   const [inputType, setInputType] = useState<"password" | "text">("password");
+  const [newPasswordInputType, setNewPasswordInputType] = useState<
+    "password" | "text"
+  >("password");
   const [checked, setChecked] = useState(false);
+  const [newPasswordChecked, setNewPasswordChecked] = useState(false);
 
   const handleShowPassword = (status: boolean) => {
     const inputType = status ? "text" : "password";
     setInputType(inputType);
     setChecked((prev) => !prev);
+  };
+
+  const handleShowNewPassword = (status: boolean) => {
+    const inputType = status ? "text" : "password";
+    setNewPasswordInputType(inputType);
+    setNewPasswordChecked((prev) => !prev);
   };
 
   return (
@@ -45,7 +58,7 @@ const AuthForm = ({
         onSubmit={(e) => handleSubmit(e)}
       >
         <>
-          {!isLogin && (
+          {!isLogin && !isResetPassword && (
             <>
               <Label htmlFor="name"> Name:</Label>
               <Input name="user_name" type="text" required autoFocus />
@@ -53,23 +66,55 @@ const AuthForm = ({
           )}
           <Label htmlFor="email">Email:</Label>
           <Input name="email" type="email" required />
-          <Label htmlFor="password">Password:</Label>
-          <Input name="password" type={inputType} required />
-          <Label className="flex flex-row items-center gap-2">
-            <Checkbox checked={checked} onCheckedChange={handleShowPassword} />
-            Show password
-          </Label>
+          {!isResetPassword && (
+            <>
+              <Label htmlFor="password">Password:</Label>
+              <Input name="password" type={inputType} required />
+              <Label className="flex flex-row items-center gap-2">
+                <Checkbox
+                  checked={checked}
+                  onCheckedChange={handleShowPassword}
+                />
+                Show password
+              </Label>
+            </>
+          )}
+          {isResetPassword && (
+            <>
+              <Label htmlFor="newPassword">New Password:</Label>
+              <Input name="newPassword" type={newPasswordInputType} required />
+              <Label className="flex flex-row items-center gap-2">
+                <Checkbox
+                  checked={newPasswordChecked}
+                  onCheckedChange={handleShowNewPassword}
+                />
+                Show new password
+              </Label>
+            </>
+          )}
         </>
         {error && <span className="text-destructive">{error}</span>}
-        <DialogFooter className="pt-3 flex flex-col">
+        <DialogFooter className="pt-3 flex flex-col gap-2">
           {progress > 0 ? (
             <Progress value={progress} className="w-[60%]" />
           ) : (
-            <Button type="submit">{buttonText}</Button>
+            <>
+              <Button type="submit">{buttonText}</Button>
+              {isLogin && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetPassword}
+                  className="text-sm"
+                >
+                  Reset Password
+                </Button>
+              )}
+            </>
           )}
         </DialogFooter>
         <span
-          onClick={handleFormType}
+          onClick={isResetPassword ? handleBackToLogin : handleFormType}
           className="text-left underline cursor-pointer"
         >
           {footerText}
@@ -86,9 +131,12 @@ interface Props {
   progress: number;
   buttonText: string;
   isLogin: boolean;
+  isResetPassword: boolean;
   title: string;
   description: string;
   handleFormType: () => void;
+  handleResetPassword: () => void;
+  handleBackToLogin: () => void;
   footerText: string;
   error: string | null;
 }

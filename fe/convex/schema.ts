@@ -5,7 +5,7 @@ export default defineSchema({
   users: defineTable({
     name: v.string(),
     email: v.string(),
-    // Note: No password field - Convex Auth will handle authentication
+    password: v.optional(v.string()),
     tags: v.optional(
       v.record(
         v.string(), // key type

@@ -2,8 +2,7 @@ import { useEffect } from "react";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
-import { useNotesContext } from "../../Context/NotesContext";
-import { useAuthContext } from "../../Context/AuthContext";
+import { useConvexContext } from "../../Context/ConvexContext";
 import { APP_NAME, NAV_ITEMS } from "@/constants";
 
 import Account from "../Account/Account";
@@ -17,10 +16,10 @@ import { cn } from "@/lib/utils";
 import Icon from "../Icon";
 import { useUIContext } from "@/Context/UIContext";
 import { NavbarItem } from "./NavbarItem";
+import { UIContext } from "@/types/types";
 
 const Navbar = () => {
-  const { isLoggedIn, logOut } = useNotesContext() as Context;
-  const { userData } = useAuthContext();
+  const { isLoggedIn, logOut, userData } = useConvexContext();
   const { showNavbar, toggleNavbar } = useUIContext() as UIContext;
   const navigate = useNavigate();
 

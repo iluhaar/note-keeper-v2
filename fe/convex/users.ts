@@ -17,6 +17,7 @@ export const createUser = mutation({
   args: {
     name: v.string(),
     email: v.string(),
+    password: v.optional(v.string()),
     tags: v.optional(
       v.record(
         v.string(), // key type
@@ -42,8 +43,64 @@ export const createUser = mutation({
     return await ctx.db.insert("users", {
       name: args.name,
       email: args.email,
+      password: args.password,
       tags: args.tags || {},
     });
+  },
+});
+
+// Authenticate existing user
+export const authenticateUser = mutation({
+  args: {
+    email: v.string(),
+    password: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .first();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isValid = args.password === user.password;
+
+    // Simple password check (in real app, use proper hashing)
+    if (!isValid) {
+      throw new Error("Invalid password");
+    }
+
+    return user;
+  },
+});
+
+// Simple password update (no tokens, no email verification)
+export const updatePassword = mutation({
+  args: {
+    email: v.string(),
+    newPassword: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .first();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Update password
+    await ctx.db.patch(user._id, {
+      password: args.newPassword,
+    });
+
+    return {
+      success: true,
+      message: "Password updated successfully",
+    };
   },
 });
 

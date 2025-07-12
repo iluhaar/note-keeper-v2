@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { useNotesContext } from "../../Context/NotesContext";
+import { useConvexContext } from "../../Context/ConvexContext";
 import { Link } from "react-router-dom";
 import { Input } from "../ui/input";
 import { Card } from "../ui/card";
+import { ConvexNote } from "../../types/convex";
 
 const SearchBar = () => {
-  const [notes, setNotes] = useState<UserNotes[]>([]);
+  const [notes, setNotes] = useState<ConvexNote[]>([]);
 
-  const { searchInNotes } = useNotesContext() as Context;
+  const { searchInNotes } = useConvexContext();
 
   const handleSearch = (e: React.FormEvent<HTMLInputElement>) => {
     const input = e.target as HTMLInputElement;
@@ -23,16 +24,13 @@ const SearchBar = () => {
 
       <div className="flex flex-row gap-3 pt-2 bg-slate-400 rounded-sm p-3 dark:bg-slate-100">
         {notes &&
-          notes.map((note: UserNotes) => (
+          notes.map((note: ConvexNote) => (
             <Card
+              key={note._id}
               className="flex-1 max-w-40
              text-left p-5 dark:bg-slate-800 shadow-sm"
             >
-              <Link
-                key={note.id}
-                to={`/notes/${note.id}`}
-                className="underline"
-              >
+              <Link to={`/notes/${note._id}`} className="underline">
                 {note.note.split("\n")[0].replaceAll("#", "")}
               </Link>
             </Card>

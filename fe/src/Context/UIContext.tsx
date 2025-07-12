@@ -22,6 +22,7 @@ export const UIProvider = ({ children }: Props) => {
     );
 
     toggleTheme(isDarkTheme);
+    setIsLoading(false); // Set loading to false after initialization
   }, []);
 
   const toggleNavbar = () => {

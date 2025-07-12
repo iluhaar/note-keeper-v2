@@ -1,11 +1,12 @@
 import MDEditor, { commands } from "@uiw/react-md-editor";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useNotesContext } from "../../Context/NotesContext";
+import { useConvexContext } from "../../Context/ConvexContext";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useUIContext } from "@/Context/UIContext";
 import { AddNoteTags } from "../NoteTags/AddTag";
+import { UIContext, UserNotes } from "@/types/types";
 
 const Tags = {
   name: "Tags",
@@ -21,24 +22,23 @@ const Tags = {
 const Editor = ({ place }: Props) => {
   const { id } = useParams();
 
-  const { addNote, userNotes, editNote } = useNotesContext() as Context;
+  const { addNote, userNotes, editNote } = useConvexContext();
 
   const { theme } = useUIContext() as UIContext;
 
   const [value, setValue] = useState<string | undefined>("");
   const [tags] = useState([]);
 
-  const handleSave = (value: string) => {
+  const handleSave = async (value: string) => {
     if (id) {
-      editNote(
-        id,
-        value,
-        userNotes.find((note: UserNotes) => note.id === id)?.tags ?? []
-      );
-      return toast("Note has been edited");
+      const note = userNotes.find((note: UserNotes) => note._id === id);
+      if (note) {
+        await editNote(note._id, value, note.tags || []);
+        return toast("Note has been edited");
+      }
     }
 
-    addNote(value, tags);
+    await addNote(value, tags);
     return toast("Note has been saved");
   };
 
@@ -48,10 +48,11 @@ const Editor = ({ place }: Props) => {
 
   useEffect(() => {
     if (id !== undefined) {
-      setValue(userNotes.find((note: UserNotes) => note.id === id)?.note);
+      const note = userNotes.find((note: UserNotes) => note._id === id);
+      setValue(note?.note);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, userNotes]);
 
   return (
     <div className="flex flex-col items-center justify-center sm:w-full h-full pt-4 sm:max-w-50 sm:pt-0 sm:items-start sm:justify-start">

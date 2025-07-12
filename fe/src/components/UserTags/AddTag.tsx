@@ -4,10 +4,10 @@ import TagForm from "./TagForm";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "../ui/dialog";
-import { useNotesContext } from "@/Context/NotesContext";
+import { useConvexContext } from "@/Context/ConvexContext";
 
 const AddTag = () => {
-  const { addTag } = useNotesContext() as Context;
+  const { addTag } = useConvexContext();
 
   const [tagName, setTagName] = useState("");
   const [tagColor, setTagColor] = useState("");

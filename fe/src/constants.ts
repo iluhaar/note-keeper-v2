@@ -2,6 +2,8 @@ import { NavItem } from "./types/shared";
 
 export const APP_NAME = "Note Keeper";
 export const BASE_URL = import.meta.env.VITE_APP_API;
+export const CONVEX_URL =
+  import.meta.env.VITE_CONVEX_URL || "https://academic-falcon-348.convex.cloud";
 
 export const NAV_ITEMS: NavItem[] = [
   {
