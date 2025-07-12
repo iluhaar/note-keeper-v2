@@ -1,15 +1,15 @@
 import { useConvexContext } from "@/Context/ConvexContext";
-import { ConvexTag } from "../../types/convex";
 
 import AddTag from "./AddTag";
 import { UserTagItem } from "./UserTagItem";
+import { Tag } from "@/types/types";
 
 const UserTags = () => {
   const { userTags } = useConvexContext();
 
   if (!userTags) return null;
 
-  const userTagsArray = Object.values(userTags) as ConvexTag[];
+  const userTagsArray = Object.values(userTags) as Tag[];
 
   if (!userTagsArray || userTagsArray.length < 1) {
     return <h2>You have no tags</h2>;

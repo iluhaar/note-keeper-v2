@@ -1,6 +1,6 @@
+import { UserNotes } from "@/types/types";
 import { useConvexContext } from "../../Context/ConvexContext";
 import Note from "./Note";
-import { ConvexNote } from "../../types/convex";
 
 const Notes = () => {
   const { userNotes } = useConvexContext();
@@ -9,7 +9,7 @@ const Notes = () => {
     return <h2>No notes yet</h2>;
   }
 
-  const content = userNotes.map(({ note, _id, tags }: ConvexNote) => {
+  const content = userNotes.map(({ note, _id, tags }: UserNotes) => {
     return (
       <div className="flex flex-col" key={_id}>
         <Note note={note} id={_id} tags={tags} />

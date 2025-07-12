@@ -23,6 +23,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Id } from "convex/_generated/dataModel";
 
 let isChanged = false;
 
@@ -59,7 +60,7 @@ export function AddNoteTags() {
 
     const filterSelectedTags = tags.filter((tag) => tag.selected);
 
-    editNote(id, findNote.note, filterSelectedTags);
+    editNote(id as Id<"notes">, findNote.note, filterSelectedTags);
     isChanged = false;
   };
 

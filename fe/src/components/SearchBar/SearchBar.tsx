@@ -3,10 +3,10 @@ import { useConvexContext } from "../../Context/ConvexContext";
 import { Link } from "react-router-dom";
 import { Input } from "../ui/input";
 import { Card } from "../ui/card";
-import { ConvexNote } from "../../types/convex";
+import { UserNotes } from "@/types/types";
 
 const SearchBar = () => {
-  const [notes, setNotes] = useState<ConvexNote[]>([]);
+  const [notes, setNotes] = useState<UserNotes[]>([]);
 
   const { searchInNotes } = useConvexContext();
 
@@ -24,7 +24,7 @@ const SearchBar = () => {
 
       <div className="flex flex-row gap-3 pt-2 bg-slate-400 rounded-sm p-3 dark:bg-slate-100">
         {notes &&
-          notes.map((note: ConvexNote) => (
+          notes.map((note: UserNotes) => (
             <Card
               key={note._id}
               className="flex-1 max-w-40

@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { hashPassword, verifyPassword } from "./hashing";
 
 // Get user by email
 export const getUserByEmail = query({
@@ -40,10 +41,15 @@ export const createUser = mutation({
       throw new Error("User already exists");
     }
 
+    // Hash password before storing
+    const hashedPassword = args.password
+      ? await hashPassword(args.password)
+      : undefined;
+
     return await ctx.db.insert("users", {
       name: args.name,
       email: args.email,
-      password: args.password,
+      password: hashedPassword,
       tags: args.tags || {},
     });
   },
@@ -65,9 +71,8 @@ export const authenticateUser = mutation({
       throw new Error("User not found");
     }
 
-    const isValid = args.password === user.password;
+    const isValid = await verifyPassword(args.password, user.password ?? "");
 
-    // Simple password check (in real app, use proper hashing)
     if (!isValid) {
       throw new Error("Invalid password");
     }
@@ -92,9 +97,12 @@ export const updatePassword = mutation({
       throw new Error("User not found");
     }
 
+    // Hash the new password before storing
+    const hashedPassword = await hashPassword(args.newPassword);
+
     // Update password
     await ctx.db.patch(user._id, {
-      password: args.newPassword,
+      password: hashedPassword,
     });
 
     return {

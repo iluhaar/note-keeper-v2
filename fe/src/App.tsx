@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Login } from "./components/Login/Login";
 import MDEditor from "@uiw/react-md-editor";
 import { useUIContext } from "./Context/UIContext";
+import { UIContext } from "./types/types";
 
 function App() {
   const navigate = useNavigate();

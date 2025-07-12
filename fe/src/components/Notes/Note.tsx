@@ -4,6 +4,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useConvexContext } from "@/Context/ConvexContext";
 import Tag from "../Tag/Tag";
 import { Tag as TagType } from "@/types/types";
+import { Id } from "convex/_generated/dataModel";
 
 const Note = ({ note, id, tags }: Props) => {
   const { userTags, deleteNote } = useConvexContext();
@@ -32,7 +33,7 @@ const Note = ({ note, id, tags }: Props) => {
           <span
             title="delete"
             className="cursor-pointer text-slate-400 hover:text-slate-500 dark:hover:text-slate-400"
-            onClick={() => deleteNote(id)}
+            onClick={() => deleteNote(id as Id<"notes">)}
             role="button"
           >
             X

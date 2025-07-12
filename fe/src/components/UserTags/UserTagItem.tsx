@@ -23,3 +23,9 @@ export const UserTagItem: FC<Tag> = ({ id, label, color }) => {
     </div>
   );
 };
+
+interface Tag {
+  color: string;
+  label: string;
+  id: string;
+}

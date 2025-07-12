@@ -4,6 +4,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { Button } from "../ui/button";
 import { useUIContext } from "@/Context/UIContext";
 import { UserNotes, UIContext } from "@/types/types";
+import { Id } from "convex/_generated/dataModel";
 
 const NotePreview = () => {
   const { id } = useParams();
@@ -22,7 +23,7 @@ const NotePreview = () => {
 
   const handleDelete = () => {
     if (id === undefined) return;
-    deleteNote(id).then(() => navigate("/notes"));
+    deleteNote(id as Id<"notes">).then(() => navigate("/notes"));
   };
 
   return (
