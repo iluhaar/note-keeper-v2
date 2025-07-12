@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import Layout from "./Layout";
-import { NotesProvider } from "./Context/NotesContext";
 import { UIProvider } from "./Context/UIContext";
 
 import Editor from "./components/Editor/Editor";
@@ -10,7 +9,7 @@ import NotePreview from "./components/Notes/NotePreview";
 import UserTags from "./components/UserTags/UserTags";
 
 import { mainRoute } from "./helpers/loaders";
-import { AuthProvider } from "./Context/AuthContext";
+import { ConvexProvider } from "./Context/ConvexContext";
 
 const router = createBrowserRouter([
   {
@@ -60,13 +59,11 @@ const router = createBrowserRouter([
 
 const AppWrapper = () => {
   return (
-    <AuthProvider>
-      <UIProvider>
-        <NotesProvider>
-          <RouterProvider router={router} />
-        </NotesProvider>
-      </UIProvider>
-    </AuthProvider>
+    <UIProvider>
+      <ConvexProvider>
+        <RouterProvider router={router} />
+      </ConvexProvider>
+    </UIProvider>
   );
 };
 

@@ -1,10 +1,11 @@
-import { useAuthContext } from "@/Context/AuthContext";
+import { useConvexContext } from "@/Context/ConvexContext";
 
 import AddTag from "./AddTag";
 import { UserTagItem } from "./UserTagItem";
+import { Tag } from "@/types/types";
 
 const UserTags = () => {
-  const { userTags } = useAuthContext();
+  const { userTags } = useConvexContext();
 
   if (!userTags) return null;
 

@@ -1,9 +1,9 @@
 import { Badge } from "@/components/ui/badge";
-import { useNotesContext } from "@/Context/NotesContext";
+import { useConvexContext } from "@/Context/ConvexContext";
 import { cn } from "@/lib/utils";
 
 const Tag = ({ label, color }: Props) => {
-  const { setFilter } = useNotesContext() as Context;
+  const { setFilter } = useConvexContext();
   return (
     <Badge
       className={cn("px-2")}

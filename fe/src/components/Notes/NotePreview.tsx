@@ -1,19 +1,21 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useNotesContext } from "../../Context/NotesContext";
+import { useConvexContext } from "../../Context/ConvexContext";
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from "../ui/button";
 import { useUIContext } from "@/Context/UIContext";
+import { UserNotes, UIContext } from "@/types/types";
+import { Id } from "convex/_generated/dataModel";
 
 const NotePreview = () => {
   const { id } = useParams();
 
-  const { userNotes, deleteNote } = useNotesContext() as Context;
+  const { userNotes, deleteNote } = useConvexContext();
 
   const { theme } = useUIContext() as UIContext;
 
   const navigate = useNavigate();
 
-  const note = userNotes.find((note: UserNotes) => note.id === id)?.note ?? "";
+  const note = userNotes.find((note: UserNotes) => note._id === id)?.note ?? "";
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(note);
@@ -21,7 +23,7 @@ const NotePreview = () => {
 
   const handleDelete = () => {
     if (id === undefined) return;
-    deleteNote(id).then(() => navigate("/notes"));
+    deleteNote(id as Id<"notes">).then(() => navigate("/notes"));
   };
 
   return (

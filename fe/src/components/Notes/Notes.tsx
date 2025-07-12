@@ -1,17 +1,18 @@
-import { useNotesContext } from "../../Context/NotesContext";
+import { UserNotes } from "@/types/types";
+import { useConvexContext } from "../../Context/ConvexContext";
 import Note from "./Note";
 
 const Notes = () => {
-  const { userNotes } = useNotesContext() as Context;
+  const { userNotes } = useConvexContext();
 
   if (!userNotes || userNotes.length < 1) {
     return <h2>No notes yet</h2>;
   }
 
-  const content = userNotes.map(({ note, id, tags }: UserNotes) => {
+  const content = userNotes.map(({ note, _id, tags }: UserNotes) => {
     return (
-      <div className="flex flex-col" key={id}>
-        <Note note={note} id={id} tags={tags} />
+      <div className="flex flex-col" key={_id}>
+        <Note note={note} id={_id} tags={tags} />
       </div>
     );
   });

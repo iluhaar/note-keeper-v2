@@ -2,17 +2,17 @@ import { FormEvent, useState } from "react";
 
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
-import { useNotesContext } from "@/Context/NotesContext";
+import { useConvexContext } from "@/Context/ConvexContext";
 import AuthForm from "./Form";
-import { useAuthContext } from "@/Context/AuthContext";
 
 export function Login() {
   const [progress, setProgress] = useState(0);
   const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [isResetPassword, setIsResetPassword] = useState<boolean>(false);
   const [error, setIsError] = useState<string | null>(null);
 
-  const { logIn, registerUser } = useNotesContext() as Context;
-  const { setIsLoggedIn } = useAuthContext();
+  const { logIn, registerUser, updatePassword, setIsLoggedIn } =
+    useConvexContext();
 
   const navigate = useNavigate();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -21,7 +21,29 @@ export function Login() {
 
     const form = e.target as HTMLFormElement;
 
-    if (isLogin) {
+    if (isResetPassword) {
+      setTimeout(() => setProgress(25), 300);
+
+      const data = await updatePassword(
+        form.email.value,
+        form.newPassword.value
+      );
+      if (data.success) {
+        setTimeout(() => setProgress(65), 300);
+        return setTimeout(() => {
+          setProgress(100);
+          setIsResetPassword(false);
+          setIsLogin(true);
+          setProgress(0);
+          // Clear form
+          form.email.value = "";
+          form.newPassword.value = "";
+        }, 700);
+      }
+
+      setTimeout(() => setProgress(0), 300);
+      setIsError(data.error);
+    } else if (isLogin) {
       setTimeout(() => setProgress(25), 300);
 
       const data = await logIn(form.email.value, form.password.value);
@@ -71,17 +93,47 @@ export function Login() {
     }
   };
 
-  const handleFromType = () => setIsLogin((prev) => !prev);
+  const handleFromType = () => {
+    setIsLogin((prev) => !prev);
+    setIsResetPassword(false);
+    setIsError(null);
+  };
 
-  const description = isLogin
+  const handleResetPassword = () => {
+    setIsResetPassword(true);
+    setIsLogin(false);
+    setIsError(null);
+  };
+
+  const handleBackToLogin = () => {
+    setIsResetPassword(false);
+    setIsLogin(true);
+    setIsError(null);
+  };
+
+  const description = isResetPassword
+    ? "Enter your email and new password to reset your password."
+    : isLogin
     ? "Fill the form and click save when you're done."
     : "Fill the form and click save when you're done.";
 
-  const title = isLogin ? "Login" : "Register";
+  const title = isResetPassword
+    ? "Reset Password"
+    : isLogin
+    ? "Login"
+    : "Register";
 
-  const footerText = isLogin ? "Not member yet?" : "Already have an account?";
+  const footerText = isResetPassword
+    ? "Back to login"
+    : isLogin
+    ? "Not member yet?"
+    : "Already have an account?";
 
-  const buttonText = isLogin ? "Login" : "Register";
+  const buttonText = isResetPassword
+    ? "Reset Password"
+    : isLogin
+    ? "Login"
+    : "Register";
 
   return (
     <Dialog>
@@ -94,9 +146,12 @@ export function Login() {
         progress={progress}
         buttonText={buttonText}
         isLogin={isLogin}
+        isResetPassword={isResetPassword}
         title={title}
         description={description}
         handleFormType={handleFromType}
+        handleResetPassword={handleResetPassword}
+        handleBackToLogin={handleBackToLogin}
         footerText={footerText}
         error={error}
       />

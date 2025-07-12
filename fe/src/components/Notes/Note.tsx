@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { useAuthContext } from "@/Context/AuthContext";
-import { useNotesContext } from "@/Context/NotesContext";
+import { useConvexContext } from "@/Context/ConvexContext";
 import Tag from "../Tag/Tag";
+import { Tag as TagType } from "@/types/types";
+import { Id } from "convex/_generated/dataModel";
 
 const Note = ({ note, id, tags }: Props) => {
-  const { userTags } = useAuthContext();
-  const { deleteNote } = useNotesContext() as Context;
+  const { userTags, deleteNote } = useConvexContext();
 
   const title = note.split("\n")[0].replaceAll("#", "");
 
@@ -15,7 +15,7 @@ const Note = ({ note, id, tags }: Props) => {
     <div className="flex flex-row flex-wrap pt-1 gap-1">
       {tags &&
         tags.length > 0 &&
-        tags.map((tag: Tag) => {
+        tags.map((tag: TagType) => {
           const color = userTags[tag.id]?.color;
 
           return <Tag key={tag.id} label={tag.label} color={color} />;
@@ -33,7 +33,7 @@ const Note = ({ note, id, tags }: Props) => {
           <span
             title="delete"
             className="cursor-pointer text-slate-400 hover:text-slate-500 dark:hover:text-slate-400"
-            onClick={() => deleteNote(id)}
+            onClick={() => deleteNote(id as Id<"notes">)}
             role="button"
           >
             X
@@ -49,5 +49,5 @@ export default Note;
 interface Props {
   id: string;
   note: string;
-  tags: Tag[];
+  tags: TagType[];
 }

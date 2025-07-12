@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/constants";
+import { UserNotes } from "@/types/types";
 
 const getNotes = async (): Promise<UserNotes[]> => {
   try {

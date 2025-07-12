@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom";
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
-import { useNotesContext } from "@/Context/NotesContext";
-import { useAuthContext } from "@/Context/AuthContext";
+import { useConvexContext } from "@/Context/ConvexContext";
+import { UserNotes, Tag } from "@/types/types";
+
+type TagWithSelected = Tag & { selected?: boolean };
 import {
   Command,
   CommandEmpty,
@@ -21,25 +23,25 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Id } from "convex/_generated/dataModel";
 
 let isChanged = false;
 
 export function AddNoteTags() {
   const { id } = useParams();
 
-  const { userNotes, editNote } = useNotesContext() as Context;
-  const { userTags } = useAuthContext();
-  const findNote = userNotes.find((note: UserNotes) => note.id === id);
+  const { userNotes, editNote, userTags } = useConvexContext();
+  const findNote = userNotes.find((note: UserNotes) => note._id === id);
 
   const userTagsArray = Object.values(userTags) as Tag[];
 
   const [open, setOpen] = useState(false);
-  const [tags, setTags] = useState<Tag[]>(userTagsArray);
+  const [tags, setTags] = useState<TagWithSelected[]>(userTagsArray);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const activeTags = userTagsArray.map((tag) => {
-      const isExists = findNote?.tags?.find((t) => t.id === tag.id);
+      const isExists = findNote?.tags?.find((t: Tag) => t.id === tag.id);
       if (isExists) {
         return {
           ...tag,
@@ -58,7 +60,7 @@ export function AddNoteTags() {
 
     const filterSelectedTags = tags.filter((tag) => tag.selected);
 
-    editNote(id, findNote.note, filterSelectedTags);
+    editNote(id as Id<"notes">, findNote.note, filterSelectedTags);
     isChanged = false;
   };
 

@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
 import { useUIContext } from "@/Context/UIContext";
+import { UIContext } from "@/types/types";
 
 const ThemeToggle = memo(({ open }: { open: boolean }) => {
   const { theme, toggleTheme, showNavbar } = useUIContext() as UIContext;

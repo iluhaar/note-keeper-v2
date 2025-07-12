@@ -1,24 +1,31 @@
+import { Id } from "../../convex/_generated/dataModel";
+
 interface UserNotes {
-  id: string;
+  _id: Id<"notes">;
+  userId: Id<"users">;
   note: string;
   tags: Tag[];
+  createdAt: number;
+  updatedAt: number;
 }
 
 interface Tag {
   color: string;
   label: string;
+  id: string;
 }
 
 interface UserData {
+  _id: Id<"users">;
   email: string;
-  password: string;
   name: string;
-  id: string;
+  password?: string;
+  tags: Record<string, Tag>;
 }
 
 interface Context {
   userNotes: UserNotes[] | [];
-  addNote: (note: string, tags: Tag[] | []) => void;
+  addNote: (note: string, tags: Tag[] | []) => Promise<void>;
   isLoggedIn: boolean;
   logIn: (
     email: string,
@@ -30,8 +37,8 @@ interface Context {
   }>;
   logOut: () => void;
   searchInNotes: (input: string) => UserNotes[];
-  deleteNote: (id: string) => Promise<void>;
-  editNote: (id: string, value: string, tags: Tag[]) => void;
+  deleteNote: (id: Id<"notes">) => Promise<void>;
+  editNote: (id: Id<"notes">, value: string, tags: Tag[]) => Promise<void>;
   registerUser: (
     arg1: string,
     arg2: string,
@@ -41,10 +48,22 @@ interface Context {
     error: null | string;
     data: UserData;
   }>;
-  addTag: (arg1: string, arg2: string) => void;
-  editTag: (arg: Tag) => void;
-  deleteTag: (arg: string) => void;
+  updatePassword: (
+    email: string,
+    newPassword: string
+  ) => Promise<{
+    success: boolean;
+    error: null | string;
+    message: string;
+  }>;
+  addTag: (arg1: string, arg2: string) => Promise<void>;
+  editTag: (arg: Tag) => Promise<void>;
+  deleteTag: (arg: string) => Promise<void>;
   setFilter: ({ value, type }: { value: string; type: string | null }) => void;
+  userData: UserData | null;
+  setUserData: (user: UserData | null) => void;
+  setIsLoggedIn: (val: boolean) => void;
+  userTags: Record<string, Tag>;
 }
 
 interface UIContext {
@@ -52,19 +71,15 @@ interface UIContext {
   toggleNavbar: () => void;
   theme: boolean;
   toggleTheme: (arg: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (val: boolean) => void;
 }
 
 interface Icon {
   img: "account" | "editor" | "notes" | "logout" | "tags";
-  onClick?: () => void;
+  onClick?: void;
 }
 
 interface UserTags {
   [key: string]: Tag;
-}
-interface Tag {
-  label: string;
-  color: string;
-  id: string;
-  selected?: boolean;
 }
