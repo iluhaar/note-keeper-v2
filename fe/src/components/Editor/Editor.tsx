@@ -5,19 +5,19 @@ import { useConvexContext } from "../../Context/ConvexContext";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useUIContext } from "@/Context/UIContext";
-import { AddNoteTags } from "../NoteTags/AddTag";
+// import { AddNoteTags } from "../NoteTags/AddTag";
 import { UIContext, UserNotes } from "@/types/types";
 
-const Tags = {
-  name: "Tags",
-  keyCommand: "tags",
-  buttonProps: { "aria-label": "Tags" },
-  icon: (
-    <>
-      <AddNoteTags />
-    </>
-  ),
-};
+// const Tags = {
+//   name: "Tags",
+//   keyCommand: "tags",
+//   buttonProps: { "aria-label": "Tags" },
+//   icon: (
+//     <>
+//       <AddNoteTags />
+//     </>
+//   ),
+// };
 
 const Editor = ({ place }: Props) => {
   const { id } = useParams();
@@ -62,7 +62,7 @@ const Editor = ({ place }: Props) => {
         className="w-[90%] sm:w-full !h-[75vh] sm:!h-[90vh]"
         onChange={setValue}
         visibleDragbar={false}
-        commands={[...commands.getCommands(), commands.divider, Tags]}
+        commands={[...commands.getCommands(), commands.divider]}
       />
 
       {place !== "home" && (
