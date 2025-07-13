@@ -12,11 +12,11 @@ export const NAV_ITEMS: NavItem[] = [
     icon: "editor",
     shouldResetFilter: true,
   },
-  {
-    path: "/tags",
-    label: "Tags",
-    icon: "tags",
-  },
+  // {
+  //   path: "/tags",
+  //   label: "Tags",
+  //   icon: "tags",
+  // },
   {
     path: "/notes",
     label: "Notes",

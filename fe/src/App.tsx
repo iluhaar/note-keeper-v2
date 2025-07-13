@@ -11,8 +11,6 @@ function App() {
 
   const { isLoggedIn } = useLoaderData() as { isLoggedIn: boolean };
 
-  console.log(isLoggedIn);
-
   const { theme } = useUIContext() as UIContext;
 
   useEffect(() => {

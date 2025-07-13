@@ -186,9 +186,20 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
 
       return { success: true, data: userData, error: null };
     } catch (error) {
+      // Provide user-friendly error messages
+      let errorMessage = "An unexpected error occurred";
+
+      if (error instanceof Error) {
+        if (error.message.includes("User not found")) {
+          errorMessage = "No account found with this email address";
+        } else if (error.message.includes("Invalid password")) {
+          errorMessage = "Incorrect password";
+        }
+      }
+
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: errorMessage,
         data: {} as UserData,
       };
     }
@@ -228,9 +239,20 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
 
       return { success: true, data: userData, error: null };
     } catch (error) {
+      // Provide user-friendly error messages
+      let errorMessage = "An unexpected error occurred";
+
+      if (error instanceof Error) {
+        if (error.message.includes("User already exists")) {
+          errorMessage = "An account with this email already exists";
+        } else if (error.message.includes("User not found")) {
+          errorMessage = "No account found with this email address";
+        }
+      }
+
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: errorMessage,
         data: {} as UserData,
       };
     }
@@ -245,9 +267,20 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
         message: result.message,
       };
     } catch (error) {
+      // Provide user-friendly error messages
+      let errorMessage = "An unexpected error occurred";
+
+      if (error instanceof Error) {
+        if (error.message === "User not found") {
+          errorMessage = "No account found with this email address";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: errorMessage,
         message: "",
       };
     }
