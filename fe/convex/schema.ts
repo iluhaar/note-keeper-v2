@@ -3,6 +3,7 @@ import { v } from "convex/values";
 
 export default defineSchema({
   users: defineTable({
+    authId: v.optional(v.string()), // WorkOS user ID, optional for manually registered users
     name: v.string(),
     email: v.string(),
     password: v.optional(v.string()),
@@ -16,7 +17,9 @@ export default defineSchema({
         })
       )
     ),
-  }).index("by_email", ["email"]),
+  })
+    .index("by_email", ["email"])
+    .index("authId", ["authId"]),
 
   notes: defineTable({
     userId: v.id("users"),

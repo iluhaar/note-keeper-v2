@@ -10,6 +10,8 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@convex-dev/workos": "^0.0.1",
+		"@convex-dev/workos-authkit": "^0.1.6",
 		"@emotion/react": "^11.11.4",
 		"@emotion/styled": "^11.11.5",
 		"@mui/icons-material": "^5.16.1",
@@ -27,10 +29,11 @@
 		"@radix-ui/react-switch": "^1.1.0",
 		"@radix-ui/react-visually-hidden": "^1.1.0",
 		"@uiw/react-md-editor": "^4.0.4",
+		"@workos-inc/authkit-react": "^0.16.0",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"cmdk": "1.0.0",
-		"convex": "^1.25.2",
+		"convex": "^1.32.0",
 		"lucide-react": "^0.417.0",
 		"next-themes": "^0.3.0",
 		"react": "^18.3.1",

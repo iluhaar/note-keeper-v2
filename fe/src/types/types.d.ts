@@ -36,6 +36,8 @@ interface Context {
     data: UserData;
   }>;
   logOut: () => void;
+  workOSSignIn: () => void;
+  isWorkOSAuthenticated: boolean;
   searchInNotes: (input: string) => UserNotes[];
   deleteNote: (id: Id<"notes">) => Promise<void>;
   editNote: (id: Id<"notes">, value: string, tags: Tag[]) => Promise<void>;
