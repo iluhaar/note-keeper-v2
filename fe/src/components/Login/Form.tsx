@@ -25,6 +25,7 @@ const AuthForm = ({
   handleBackToLogin,
   footerText,
   error,
+  onWorkOSSignIn,
 }: Props) => {
   const [inputType, setInputType] = useState<"password" | "text">("password");
   const [newPasswordInputType, setNewPasswordInputType] = useState<
@@ -53,6 +54,31 @@ const AuthForm = ({
           {description}
         </DialogDescription>
       </DialogHeader>
+
+      {/* WorkOS Sign-in Button */}
+      {!isResetPassword && (
+        <div className="flex flex-col gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={onWorkOSSignIn}
+          >
+            Sign in with WorkOS
+          </Button>
+          <div className="relative my-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with email
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <form
         className="flex flex-col text-left gap-2"
         onSubmit={(e) => handleSubmit(e)}
@@ -139,4 +165,5 @@ interface Props {
   handleBackToLogin: () => void;
   footerText: string;
   error: string | null;
+  onWorkOSSignIn: () => void;
 }

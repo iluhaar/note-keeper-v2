@@ -11,7 +11,7 @@ export function Login() {
   const [isResetPassword, setIsResetPassword] = useState<boolean>(false);
   const [error, setIsError] = useState<string | null>(null);
 
-  const { logIn, registerUser, updatePassword, setIsLoggedIn } =
+  const { logIn, registerUser, updatePassword, setIsLoggedIn, workOSSignIn } =
     useConvexContext();
 
   const navigate = useNavigate();
@@ -154,6 +154,7 @@ export function Login() {
         handleBackToLogin={handleBackToLogin}
         footerText={footerText}
         error={error}
+        onWorkOSSignIn={workOSSignIn}
       />
     </Dialog>
   );

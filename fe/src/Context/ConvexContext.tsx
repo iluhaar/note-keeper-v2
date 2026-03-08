@@ -3,9 +3,11 @@ import {
   ReactElement,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useConvexAuth } from "convex/react";
+import { useAuth } from "@workos-inc/authkit-react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { Context, Tag, UserData, UserNotes } from "@/types/types";
@@ -22,10 +24,54 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
     type: null,
   });
 
+  // WorkOS auth state
+  const { isAuthenticated: isWorkOSAuthenticated } = useConvexAuth();
+  const { signIn, signOut, user: workOSUser } = useAuth();
+
+  // Mutation to resolve the app user for a WorkOS session
+  const getOrCreateUserByAuth = useMutation(api.users.getOrCreateUserByAuth);
+  const hasResolvedWorkOSUser = useRef(false);
+
+  // Resolve the app user when WorkOS authentication completes
+  useEffect(() => {
+    if (isWorkOSAuthenticated && !hasResolvedWorkOSUser.current) {
+      hasResolvedWorkOSUser.current = true;
+
+      // Pass email/name from the WorkOS client SDK since the JWT
+      // token doesn't include profile claims
+      const email = workOSUser?.email ?? "";
+      const name =
+        [workOSUser?.firstName, workOSUser?.lastName]
+          .filter(Boolean)
+          .join(" ") || "";
+
+      getOrCreateUserByAuth({ email, name })
+        .then((user) => {
+          if (user) {
+            const data: UserData = {
+              _id: user._id,
+              name: user.name,
+              email: user.email,
+              tags: user.tags || {},
+            };
+            setUserData(data);
+            setIsLoggedIn(true);
+          }
+        })
+        .catch((err) => {
+          console.error("[WorkOS Auth] Failed to resolve user:", err);
+          hasResolvedWorkOSUser.current = false;
+        });
+    }
+    if (!isWorkOSAuthenticated) {
+      hasResolvedWorkOSUser.current = false;
+    }
+  }, [isWorkOSAuthenticated, workOSUser, getOrCreateUserByAuth]);
+
   // Convex queries
   const notes = useQuery(
     api.notes.getNotes,
-    userData?._id ? { userId: userData._id } : "skip"
+    userData?._id ? { userId: userData._id } : "skip",
   );
 
   // Convex mutations
@@ -37,15 +83,17 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
   const updatePasswordMutation = useMutation(api.users.updatePassword);
   const updateUserTags = useMutation(api.users.updateUserTags);
 
-  // Load user from localStorage on mount
+  // Load user from localStorage on mount (manual login persistence)
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      setUserData(parsedUser);
-      setIsLoggedIn(true);
+    if (!isWorkOSAuthenticated) {
+      const user = localStorage.getItem("user");
+      if (user) {
+        const parsedUser = JSON.parse(user);
+        setUserData(parsedUser);
+        setIsLoggedIn(true);
+      }
     }
-  }, []);
+  }, [isWorkOSAuthenticated]);
 
   // Update document title when user changes
   useEffect(() => {
@@ -96,19 +144,13 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
     });
 
     // Update local state
-    setUserData({
-      ...userData,
-      tags: updatedTags,
-    });
+    const updatedUserData = { ...userData, tags: updatedTags };
+    setUserData(updatedUserData);
 
-    // Update localStorage
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        ...userData,
-        tags: updatedTags,
-      })
-    );
+    // Only persist to localStorage for manual login users
+    if (!isWorkOSAuthenticated) {
+      localStorage.setItem("user", JSON.stringify(updatedUserData));
+    }
   };
 
   const editTag = async (tag: Tag) => {
@@ -125,19 +167,12 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
     });
 
     // Update local state
-    setUserData({
-      ...userData,
-      tags: updatedTags,
-    });
+    const updatedUserData = { ...userData, tags: updatedTags };
+    setUserData(updatedUserData);
 
-    // Update localStorage
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        ...userData,
-        tags: updatedTags,
-      })
-    );
+    if (!isWorkOSAuthenticated) {
+      localStorage.setItem("user", JSON.stringify(updatedUserData));
+    }
   };
 
   const deleteTag = async (tagId: string) => {
@@ -152,21 +187,15 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
     });
 
     // Update local state
-    setUserData({
-      ...userData,
-      tags: updatedTags,
-    });
+    const updatedUserData = { ...userData, tags: updatedTags };
+    setUserData(updatedUserData);
 
-    // Update localStorage
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        ...userData,
-        tags: updatedTags,
-      })
-    );
+    if (!isWorkOSAuthenticated) {
+      localStorage.setItem("user", JSON.stringify(updatedUserData));
+    }
   };
 
+  // Manual email/password login
   const logIn = async (email: string, password: string) => {
     try {
       const user = await authenticateUser({ email, password });
@@ -209,12 +238,22 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
     setIsLoggedIn(false);
     setUserData(null);
     localStorage.removeItem("user");
+    hasResolvedWorkOSUser.current = false;
+
+    if (isWorkOSAuthenticated) {
+      void signOut({ returnTo: window.location.origin });
+    }
+  };
+
+  // WorkOS sign-in (redirect to AuthKit hosted UI)
+  const workOSSignIn = () => {
+    void signIn();
   };
 
   const registerUser = async (
     email: string,
     password: string,
-    name: string
+    name: string,
   ) => {
     try {
       const userId = await createUser({
@@ -299,7 +338,7 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
 
     if (filter.type === "tag") {
       return notes.filter((note) =>
-        note.tags.some((tag) => tag.label === filter.value)
+        note.tags.some((tag) => tag.label === filter.value),
       );
     }
 
@@ -323,6 +362,8 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
         deleteTag,
         logIn,
         logOut,
+        workOSSignIn,
+        isWorkOSAuthenticated,
         registerUser,
         updatePassword,
         searchInNotes,
