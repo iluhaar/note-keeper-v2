@@ -45,23 +45,28 @@ export const ConvexProvider = ({ children }: { children: ReactElement }) => {
           .filter(Boolean)
           .join(" ") || "";
 
-      getOrCreateUserByAuth({ email, name }).then((user) => {
-        if (user) {
-          const data: UserData = {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            tags: user.tags || {},
-          };
-          setUserData(data);
-          setIsLoggedIn(true);
-        }
-      });
+      getOrCreateUserByAuth({ email, name })
+        .then((user) => {
+          if (user) {
+            const data: UserData = {
+              _id: user._id,
+              name: user.name,
+              email: user.email,
+              tags: user.tags || {},
+            };
+            setUserData(data);
+            setIsLoggedIn(true);
+          }
+        })
+        .catch((err) => {
+          console.error("[WorkOS Auth] Failed to resolve user:", err);
+          hasResolvedWorkOSUser.current = false;
+        });
     }
     if (!isWorkOSAuthenticated) {
       hasResolvedWorkOSUser.current = false;
     }
-  }, [isWorkOSAuthenticated, workOSUser]);
+  }, [isWorkOSAuthenticated, workOSUser, getOrCreateUserByAuth]);
 
   // Convex queries
   const notes = useQuery(
