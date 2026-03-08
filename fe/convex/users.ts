@@ -81,8 +81,9 @@ export const getOrCreateUserByAuth = mutation({
     }
 
     // No existing user found -- create one (with race condition handling)
+    // Use placeholder email if WorkOS didn't provide one to avoid empty-string index entries
     const userName = args.name || identity.name || "User";
-    const userEmail = email ?? "";
+    const userEmail = email || `${authId}@workos.local`;
 
     try {
       const userId = await ctx.db.insert("users", {

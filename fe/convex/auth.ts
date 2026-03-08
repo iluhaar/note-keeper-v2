@@ -42,10 +42,13 @@ export const { authKitEvent } = authKit.events({
     }
 
     // Safe insert with retry on race condition
+    // Use placeholder email if WorkOS didn't provide one
+    const userEmail = email || `${authId}@workos.local`;
+
     try {
       await ctx.db.insert("users", {
         authId,
-        email: email ?? "",
+        email: userEmail,
         name,
         tags: {},
       });
@@ -58,7 +61,7 @@ export const { authKitEvent } = authKit.events({
         .first();
 
       if (existing) {
-        await ctx.db.patch(existing._id, { email, name });
+        await ctx.db.patch(existing._id, { email: userEmail, name });
       }
     }
   },
