@@ -11,26 +11,55 @@ export const authKit = new AuthKit<DataModel>(components.workOSAuthKit, {
 
 export const { authKitEvent } = authKit.events({
   "user.created": async (ctx, event) => {
-    // Check if a user with this email already exists (manual registration)
-    const existingUser = await ctx.db
+    const email = event.data.email;
+    const authId = event.data.id;
+    const name = `${event.data.firstName ?? ""} ${event.data.lastName ?? ""}`.trim() || "User";
+
+    // First try to find by authId (fast path)
+    const byAuthId = await ctx.db
       .query("users")
-      .withIndex("by_email", (q) => q.eq("email", event.data.email))
+      .withIndex("authId", (q) => q.eq("authId", authId))
       .first();
 
-    if (existingUser) {
-      // Link the WorkOS authId to the existing user
-      await ctx.db.patch(existingUser._id, {
-        authId: event.data.id,
-        name: existingUser.name || `${event.data.firstName ?? ""} ${event.data.lastName ?? ""}`.trim(),
-      });
-    } else {
-      // Create a new user record
+    if (byAuthId) {
+      // Already exists by authId, just update
+      await ctx.db.patch(byAuthId._id, { email, name });
+      return;
+    }
+
+    // Try to find by email
+    const byEmail = email
+      ? await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", email))
+          .first()
+      : null;
+
+    if (byEmail) {
+      // Link existing manual user to WorkOS authId
+      await ctx.db.patch(byEmail._id, { authId, name: byEmail.name || name });
+      return;
+    }
+
+    // Safe insert with retry on race condition
+    try {
       await ctx.db.insert("users", {
-        authId: event.data.id,
-        email: event.data.email,
-        name: `${event.data.firstName ?? ""} ${event.data.lastName ?? ""}`.trim() || "User",
+        authId,
+        email: email ?? "",
+        name,
         tags: {},
       });
+    } catch (err) {
+      // Race condition: another request created the user between our query and insert
+      // Find and update the existing record
+      const existing = await ctx.db
+        .query("users")
+        .withIndex("authId", (q) => q.eq("authId", authId))
+        .first();
+
+      if (existing) {
+        await ctx.db.patch(existing._id, { email, name });
+      }
     }
   },
 

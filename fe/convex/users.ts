@@ -80,18 +80,46 @@ export const getOrCreateUserByAuth = mutation({
       }
     }
 
-    // No existing user found -- create one
+    // No existing user found -- create one (with race condition handling)
     const userName = args.name || identity.name || "User";
     const userEmail = email ?? "";
 
-    const userId = await ctx.db.insert("users", {
-      authId,
-      name: userName,
-      email: userEmail,
-      tags: {},
-    });
+    try {
+      const userId = await ctx.db.insert("users", {
+        authId,
+        name: userName,
+        email: userEmail,
+        tags: {},
+      });
 
-    return await ctx.db.get(userId);
+      return await ctx.db.get(userId);
+    } catch (err) {
+      // Race condition: webhook or another request created the user
+      // Find and return the existing record
+      const existing = await ctx.db
+        .query("users")
+        .withIndex("authId", (q) => q.eq("authId", authId))
+        .first();
+
+      if (existing) {
+        return existing;
+      }
+
+      // Try by email as fallback
+      if (userEmail) {
+        const byEmail = await ctx.db
+          .query("users")
+          .withIndex("by_email", (q) => q.eq("email", userEmail))
+          .first();
+        if (byEmail) {
+          // Link authId to existing manual user
+          await ctx.db.patch(byEmail._id, { authId });
+          return await ctx.db.get(byEmail._id);
+        }
+      }
+
+      return null;
+    }
   },
 });
 
